@@ -1,0 +1,81 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+}
+.total {
+  text-align: right;
+  margin-top: 10px;
+}
+.products,
+.cart {
+  width: 300px;
+  height: 400px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+.others {
+  width: 300px;
+  height: auto;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+h1 {
+  text-align: center;
+}
+input,
+select {
+  height: 20px;
+  margin: 10px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+select {
+  margin: 10px;
+}
+li {
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+nav ul,
+nav ol {
+  height: 200px;
+}
+nav ul,
+nav ol {
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+@media (max-width: 750px) {
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

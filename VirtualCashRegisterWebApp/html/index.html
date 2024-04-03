@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Простая касса</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Виртуальная касса</h1>
+        <div class="row-container settings-container">
+            <p>TPN:</p>
+            <input type="text" id="tpn-nput" />
+            <p>Ключ:</p>
+            <input type="text" id="auth-key-input" />
+            <p>Порт:</p>
+            <input type="text" id="port-input" />
+        </div>
+        <div class="row-container">
+            <div class="products">
+                <h2>Товары</h2>
+                <nav>
+                    <ul id="products-list"></ul>
+                </nav>
+            </div>
+            <div class="cart">
+                <h2>Корзина</h2>
+                <nav>
+                    <ol id="cart-list"></ol>
+                </nav>
+                <div class="total">
+                    <p>Итого:</p>
+                    <span id="total-price">0.00</span> руб.
+                </div>
+                <button id="clear-cart">Очистить корзину</button>
+            </div>
+        </div>
+        <div class="row-container">
+            <div class="others">
+                <h2 for="custom-tip">Введите чаевые:</h2>
+                <input type="number"
+                       id="custom-tip"
+                       min="0"
+                       step=".01"
+                       value="0.00" />
+                <h2 for="receipt-recieve">Кто получит чек:</h2>
+                <select name="receipt-select" id="receipt-recieve">
+                    <option value="Both">Оба</option>
+                    <option value="Customer">Покупатель</option>
+                    <option value="Merchant">Продавец</option>
+                </select>
+            </div>
+        </div>
+        <button id="sendRequest">Отправить запрос</button>
+    </div>
+
+    <div id="saleResponse"></div>
+    <script>
+        document.getElementById("sendRequest").addEventListener("click", send);
+        async function send() {
+            const response = await fetch("/api/user", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Amount: "12.5",
+                    TipAmount: "1.1",
+                    PaymentType: "Credit",
+                    ReferenceId: "227",
+                    PrintReceipt: "No",
+                    GetReceipt: "Both",
+                    InvoiceNumber: "10",
+                    Tpn: "Z11MAKSTEST",
+                    Authkey: "zbhRAW9N6x",
+                })
+            });
+            const message = await response.json();
+            document.getElementById("saleResponse").innerText = message.text;
+        };
+    </script>
+</body>
+</html>
