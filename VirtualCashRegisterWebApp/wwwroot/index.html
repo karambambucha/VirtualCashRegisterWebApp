@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Простая касса</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
     <div class="container">
@@ -56,27 +56,7 @@
     </div>
 
     <div id="saleResponse"></div>
-    <script>
-        document.getElementById("sendRequest").addEventListener("click", send);
-        async function send() {
-            const response = await fetch("/api/user", {
-                method: "POST",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    Amount: "12.5",
-                    TipAmount: "1.1",
-                    PaymentType: "Credit",
-                    ReferenceId: "227",
-                    PrintReceipt: "No",
-                    GetReceipt: "Both",
-                    InvoiceNumber: "10",
-                    Tpn: "Z11MAKSTEST",
-                    Authkey: "zbhRAW9N6x",
-                })
-            });
-            const message = await response.json();
-            document.getElementById("saleResponse").innerText = message.text;
-        };
+    <script src="js/script.js">
     </script>
 </body>
 </html>

@@ -2,9 +2,9 @@
 using System.Net;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder();
+var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-
+app.UseStaticFiles();
 app.Run(async (context) =>
 {
     var response = context.Response;
@@ -44,7 +44,7 @@ app.Run(async (context) =>
     else
     {
         response.ContentType = "text/html; charset=utf-8";
-        await response.SendFileAsync("html/index.html");
+        await response.SendFileAsync("wwwroot/index.html");
     }
 });
 

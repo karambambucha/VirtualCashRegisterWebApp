@@ -33,7 +33,7 @@ const clearCartButton = document.getElementById("clear-cart");
 let products = [];
 
 // Загрузка данных из JSON
-fetch("products.json")
+fetch("../wwwroot/products.json")
   .then((response) => response.json())
   .then((data) => {
     products = data;
@@ -86,4 +86,23 @@ clearCartButton.onclick = () => {
   cartList.innerHTML = "";
   updateTotalPrice();
 };
-
+document.getElementById("sendRequest").addEventListener("click", send);
+async function send() {
+    const response = await fetch("/api/user", {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+            Amount: "12.5",
+            TipAmount: "1.1",
+            PaymentType: "Credit",
+            ReferenceId: "227",
+            PrintReceipt: "No",
+            GetReceipt: "Both",
+            InvoiceNumber: "10",
+            Tpn: "Z11MAKSTEST",
+            Authkey: "zbhRAW9N6x",
+        })
+    });
+    const message = await response.json();
+    document.getElementById("saleResponse").innerText = message.text;
+};

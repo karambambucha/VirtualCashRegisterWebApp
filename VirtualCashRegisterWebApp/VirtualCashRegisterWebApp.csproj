@@ -6,4 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\index.html" />
+    <None Include="wwwroot\js\script.js" />
+    <None Include="wwwroot\css\style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="html\" />
+  </ItemGroup>
+
 </Project>
