@@ -1,6 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Net;
+﻿using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -15,26 +15,31 @@ app.Run(async (context) =>
         try
         {
             var saleRequest = await request.ReadFromJsonAsync<SaleRequest>();
+
             if (saleRequest != null)
             {
-
-                using (var wb = new WebClient())
+                using (var httpClient = new HttpClient())
                 {
-                    var data = new NameValueCollection();
-                    data["Amount"] = saleRequest.Amount;
-                    data["TipAmount"] = saleRequest.TipAmount;
-                    data["PaymentType"] = saleRequest.PaymentType;
-                    data["ReferenceId"] = saleRequest.ReferenceId;
-                    data["PrintReceipt"] = saleRequest.PrintReceipt;
-                    data["GetReceipt"] = saleRequest.GetReceipt;
-                    data["InvoiceNumber"] = saleRequest.InvoiceNumber;
-                    data["Tpn"] = saleRequest.Tpn;
-                    data["Authkey"] = saleRequest.Authkey;
+                    using StringContent jsonContent = new(
+                    System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        Amount = saleRequest.Amount,
+                        TipAmount = saleRequest.TipAmount,
+                        PaymentType = saleRequest.PaymentType,
+                        ReferenceId = Guid.NewGuid().ToString(),
+                        PrintReceipt = saleRequest.PrintReceipt,
+                        GetReceipt = saleRequest.GetReceipt,
+                        InvoiceNumber = saleRequest.InvoiceNumber,
+                        Tpn = saleRequest.Tpn,
+                        AuthKey = saleRequest.AuthKey,
+                    }),
+                    Encoding.UTF8,
+                    "application/json");
 
-                    var saleResponse = wb.UploadValues("https://test.spinpos.net/spin/v2/Payment/Sale", "POST", data);
-                    string responseInString = Encoding.UTF8.GetString(saleResponse);
-                    Console.WriteLine(responseInString);
-                    message = responseInString;
+                    using HttpResponseMessage jsonResponse = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
+                    var saleResponse = await jsonResponse.Content.ReadAsStringAsync();
+                    var jObj = JsonConvert.DeserializeObject(saleResponse);
+                    message = jObj.ToString();
                 }
             }
         }
@@ -50,4 +55,4 @@ app.Run(async (context) =>
 
 app.Run();
 
-public record SaleRequest(string Amount, string TipAmount, string PaymentType, string ReferenceId, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string Authkey);
+public record SaleRequest(string Amount, string TipAmount, string PaymentType, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string AuthKey);

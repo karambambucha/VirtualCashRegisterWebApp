@@ -1,12 +1,3 @@
-function generateGUID() {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
-    (
-      +c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))
-    ).toString(16)
-  );
-}
-
 function sendRequest() {
   if (getTotalPrice() != 0.0) {
     console.log(
@@ -33,7 +24,7 @@ const clearCartButton = document.getElementById("clear-cart");
 let products = [];
 
 // Загрузка данных из JSON
-fetch("../wwwroot/products.json")
+fetch("products.json")
   .then((response) => response.json())
   .then((data) => {
     products = data;
@@ -88,19 +79,20 @@ clearCartButton.onclick = () => {
 };
 document.getElementById("sendRequest").addEventListener("click", send);
 async function send() {
+    document.getElementById("saleResponse").innerText = "";
+    var receiptSelect = document.getElementById("receipt-recieve");
     const response = await fetch("/api/user", {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({
-            Amount: "12.5",
-            TipAmount: "1.1",
+            Amount: document.getElementById("total-price").innerHTML,
+            TipAmount: document.getElementById("custom-tip").value,
             PaymentType: "Credit",
-            ReferenceId: "227",
             PrintReceipt: "No",
-            GetReceipt: "Both",
+            GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
             InvoiceNumber: "10",
-            Tpn: "Z11MAKSTEST",
-            Authkey: "zbhRAW9N6x",
+            Tpn: document.getElementById("tpn-input").value,
+            Authkey: document.getElementById("auth-key-input").value
         })
     });
     const message = await response.json();
