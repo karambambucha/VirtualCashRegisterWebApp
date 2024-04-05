@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json;
+using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -36,10 +37,10 @@ app.Run(async (context) =>
                     Encoding.UTF8,
                     "application/json");
 
-                    using HttpResponseMessage jsonResponse = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
-                    var saleResponse = await jsonResponse.Content.ReadAsStringAsync();
-                    var jObj = JsonConvert.DeserializeObject(saleResponse);
-                    message = jObj.ToString();
+                    using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
+                    var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
+                    SaleResponse saleResponse = JsonConvert.DeserializeObject<SaleResponse>(jsonResponse);
+                    message = JsonConvert.DeserializeObject(jsonResponse).ToString();
                 }
             }
         }
@@ -56,3 +57,52 @@ app.Run(async (context) =>
 app.Run();
 
 public record SaleRequest(string Amount, string TipAmount, string PaymentType, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string AuthKey);
+public class SaleResponse
+{
+    public Amounts? Amounts;
+    public GeneralResponse? GeneralResponse;
+    public CardData? CardData;
+    public string? PaymentType;
+    public string? TransactionType;
+    public string? AuthCode;
+    public string? ReferenceId;
+    public string? InvoiceNumber;
+    public string? BatchNumber;
+    public Receipts? Receipts;
+
+};
+
+public class Amounts
+{
+    public double TotalAmount;
+    public double Amount;
+    public double TipAmount;
+    public double FeeAmount;
+    public double TaxAmount;
+    public override string ToString()
+    {
+        return $"Полная цена: {TotalAmount} руб., себестоимость: {Amount} руб., чаевые: {TipAmount}";
+    }
+}
+public class GeneralResponse
+{
+    public string? ResultCode;
+    public string? StatusCode;
+    public string? Message;
+    public string? DetailedMessage;
+}
+
+public class CardData
+{
+    public string? CardType;
+    public string? EntryType;
+    public string? Last4;
+    public string? First4;
+    public string? BIN;
+    public string? Name;
+}
+public class Receipts
+{
+    public string? Customer;
+    public string? Merchant;
+}
