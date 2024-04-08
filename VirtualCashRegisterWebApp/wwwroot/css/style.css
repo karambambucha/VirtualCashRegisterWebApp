@@ -1,5 +1,7 @@
 body {
   font-family: "Source Sans Pro", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 .container {
   display: flex;
@@ -11,22 +13,36 @@ body {
   flex-direction: row;
   align-items: start;
 }
-.settings-container
-{
-  margin:5px;
+.settings-container {
+  margin: 5px;
 }
-.req-container
-{
-  margin-left:5px;
-  margin-right:5px;
+.request-container, .receipt-container {
+    margin-left: 5px;
+    margin-right: 5px;
 }
-.sale-response {
+.request-container {
+    margin-top: 10px;
+}
+.show-field
+{
   padding: 20px;
   margin-top: 10px;
-  margin-bottom:10px;
+  margin-bottom: 10px;
   border: 1px solid #ddd;
-  width: 420px;
   align-items: center;
+  height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.sale-request {
+  width: 350px;
+}
+.sale-response {
+    width: 600px;
+}
+.receipt
+{
+  width:475px;
 }
 .total {
   text-align: right;
@@ -41,12 +57,39 @@ body {
   padding: 20px;
   border: 1px solid #ddd;
 }
-.request-button
-{
+.request-button {
   background-color: #47a80f;
-  color:#f5f4f4;
-  
+  color: #f5f4f4;
+  margin-bottom: 15px;
 }
+
+.tab {
+    background-color: #eeeeee;
+    width: 290px;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  border-top: none;
+}
+
 h1 {
   text-align: center;
 }
@@ -105,5 +148,8 @@ nav ol {
   }
   .cart-list {
     height: 150px;
+  }
+  .show-field {
+    width: 300px;
   }
 }

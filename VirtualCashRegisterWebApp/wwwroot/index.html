@@ -68,13 +68,35 @@
     </div>
     <div class="container">
       <div class="row-container">
-        <div class="req-container">
-          <div class="request-title">Запрос:</div>
-          <div id="sale-request" class="sale-response"></div>
+        <div class="request-container">
+          <div class="request-title"><b>Запрос:</b></div>
+          <div id="sale-request" class="show-field sale-request"></div>
         </div>
         <div class="req-container">
-          <div class="request-title">Ответ:</div>
-          <div id="sale-response" class="sale-response"></div>
+          <div class="tab">
+            <button class="tablinks" onclick="openResponse(event, 'jsonResponse')" id="defaultOpen">
+              <b>Ответ в JSON</b>
+            </button>
+            <button class="tablinks" onclick="openResponse(event, 'textResponse')">
+              <b>Текстовый ответ</b>
+            </button>
+          </div>
+          <div id="jsonResponse" class="tabcontent">
+            <div id="sale-response" class="show-field sale-response"></div>
+          </div>
+          <div id="textResponse" class="tabcontent">
+            <div id="sale-response-text" class="show-field sale-response"></div>
+          </div>
+        </div>
+      </div>
+      <div class="receipt-container row-container">
+        <div class="receipt-container">
+          <div class="request-title"><b>Чек продавца:</b></div>
+          <div id="receipt-merchant" class="show-field receipt"></div>
+        </div>
+        <div class="receipt-container">
+          <div class="request-title"><b>Чек покупателя:</b></div>
+          <div id="receipt-customer" class="show-field receipt"></div>
         </div>
       </div>
     </div>

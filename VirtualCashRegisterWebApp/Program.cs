@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.Text;
-using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -30,7 +25,7 @@ app.Run(async (context) =>
                         saleRequest.Amount,
                         saleRequest.TipAmount,
                         saleRequest.PaymentType,
-                        ReferenceId = Guid.NewGuid().ToString(),
+                        saleRequest.ReferenceId,
                         saleRequest.PrintReceipt,
                         saleRequest.GetReceipt,
                         saleRequest.InvoiceNumber,
@@ -42,9 +37,8 @@ app.Run(async (context) =>
 
                     using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
                     var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-                    SaleResponse saleResponse = JsonConvert.DeserializeObject<SaleResponse>(jsonResponse);
-                    //message = JsonConvert.DeserializeObject(jsonResponse).ToString();
-                    message = saleResponse.ToString();
+                    //SaleResponse saleResponse = JsonConvert.DeserializeObject<SaleResponse>(jsonResponse);
+                    message = JsonConvert.DeserializeObject(jsonResponse).ToString();
                 }
             }
         }
@@ -60,7 +54,7 @@ app.Run(async (context) =>
 
 app.Run();
 
-public record SaleRequest(string Amount, string TipAmount, string PaymentType, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string AuthKey);
+public record SaleRequest(string Amount, string TipAmount, string PaymentType, string ReferenceId, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string AuthKey);
 public class SaleResponse
 {
     public Amounts? Amounts;
@@ -153,7 +147,7 @@ public class Receipts
     public override string ToString()
     {
         var receiptString = new StringBuilder();
-        if(Customer != null)
+        if (Customer != null)
             receiptString.Append($"Чек покупателя: {Customer}");
         if (Merchant != null)
             receiptString.Append($"\n\nЧек продавца: {Merchant}");
