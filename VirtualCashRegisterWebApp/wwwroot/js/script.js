@@ -77,24 +77,28 @@ clearCartButton.onclick = () => {
   cartList.innerHTML = "";
   updateTotalPrice();
 };
-document.getElementById("sendRequest").addEventListener("click", send);
-async function send() {
-    document.getElementById("saleResponse").innerText = "";
+document.getElementById("send-request").addEventListener("click", sendSaleRequest);
+async function sendSaleRequest() {
+    document.getElementById("sale-response").innerText = "";
     var receiptSelect = document.getElementById("receipt-recieve");
-    const response = await fetch("/api/user", {
+    var paymentSelect = document.getElementById("payment-type");
+    var obj = {
+        Amount: document.getElementById("total-price").innerHTML,
+        TipAmount: document.getElementById("custom-tip").value,
+        PaymentType: paymentSelect.options[paymentSelect.selectedIndex].value,
+        PrintReceipt: "No",
+        GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
+        InvoiceNumber: "10",
+        Tpn: document.getElementById("tpn-input").value,
+        Authkey: document.getElementById("auth-key-input").value
+    };
+    var requestBody = JSON.stringify(obj, null, 4);
+    document.getElementById("sale-request").innerText = requestBody;
+    const response = await fetch("/api/user/Sale", {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({
-            Amount: document.getElementById("total-price").innerHTML,
-            TipAmount: document.getElementById("custom-tip").value,
-            PaymentType: "Credit",
-            PrintReceipt: "No",
-            GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
-            InvoiceNumber: "10",
-            Tpn: document.getElementById("tpn-input").value,
-            Authkey: document.getElementById("auth-key-input").value
-        })
+        body: requestBody
     });
     const message = await response.json();
-    document.getElementById("saleResponse").innerText = message.text;
+    document.getElementById("sale-response").innerText = message.text;
 };

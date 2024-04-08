@@ -1,42 +1,51 @@
 body {
-  font-family: sans-serif;
-  margin: 20px;
+  font-family: "Source Sans Pro", sans-serif;
 }
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.saleResponse {
-    margin: 10px;
-    padding: 20px;
-    border: 1px solid #ddd;
-}
-
 .row-container {
   display: flex;
   flex-direction: row;
-  align-items: top;
+  align-items: start;
+}
+.settings-container
+{
+  margin:5px;
+}
+.req-container
+{
+  margin-left:5px;
+  margin-right:5px;
+}
+.sale-response {
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom:10px;
+  border: 1px solid #ddd;
+  width: 420px;
+  align-items: center;
 }
 .total {
   text-align: right;
   margin-top: 10px;
 }
 .products,
-.cart {
+.cart,
+.others {
   width: 300px;
-  height: 400px;
-  margin: 10px;
+  height: 450px;
+  margin: 5px;
   padding: 20px;
   border: 1px solid #ddd;
 }
-.others {
-  width: 300px;
-  height: auto;
-  margin: 10px;
-  padding: 20px;
-  border: 1px solid #ddd;
+.request-button
+{
+  background-color: #47a80f;
+  color:#f5f4f4;
+  
 }
 h1 {
   text-align: center;
@@ -44,7 +53,8 @@ h1 {
 input,
 select {
   height: 20px;
-  margin: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 ul {
   list-style: none;
@@ -60,7 +70,8 @@ li {
   border-radius: 5px;
 }
 button {
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 5px 10px;
   font-size: 16px;
   border: 1px solid #ddd;
@@ -69,7 +80,7 @@ button {
 }
 nav ul,
 nav ol {
-  height: 200px;
+  height: 250px;
 }
 nav ul,
 nav ol {
@@ -77,10 +88,22 @@ nav ol {
   overflow-y: scroll;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 950px) {
   .row-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .products {
+    height: 300px;
+  }
+  .products-list {
+    height: 200px;
+  }
+  .cart {
+    height: 350px;
+  }
+  .cart-list {
+    height: 150px;
   }
 }

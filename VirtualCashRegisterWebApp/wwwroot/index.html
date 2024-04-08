@@ -1,61 +1,83 @@
 ﻿<!DOCTYPE html>
 <html lang="ru">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Простая касса</title>
+    <title>Виртуальная касса</title>
     <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Виртуальная касса</h1>
-        <div class="row-container settings-container">
-            <p>TPN:</p>
-            <input type="text" id="tpn-input" />
-            <p>Ключ:</p>
-            <input type="text" id="auth-key-input" />
-            <p>Порт:</p>
-            <input type="text" id="port-input" />
+      <h1>Виртуальная касса</h1>
+      <div class="row-container settings-container">
+        TPN:
+        <input type="text" id="tpn-input" />
+        Ключ:
+        <input type="text" id="auth-key-input" />
+        Порт:
+        <input type="text" id="port-input" />
+      </div>
+      <div class="row-container">
+        <div class="products">
+          <h2>Товары</h2>
+          <nav>
+            <ul id="products-list" class="products-list"></ul>
+          </nav>
         </div>
-        <div class="row-container">
-            <div class="products">
-                <h2>Товары</h2>
-                <nav>
-                    <ul id="products-list"></ul>
-                </nav>
-            </div>
-            <div class="cart">
-                <h2>Корзина</h2>
-                <nav>
-                    <ol id="cart-list"></ol>
-                </nav>
-                <div class="total">
-                    <p>Итого:</p>
-                    <span id="total-price">0.00</span> руб.
-                </div>
-                <button id="clear-cart">Очистить корзину</button>
-            </div>
+        <div class="cart">
+          <h2>Корзина</h2>
+          <nav>
+            <ol id="cart-list" class="cart-list"></ol>
+          </nav>
+          <div class="total">
+            <p>Итого:</p>
+            <span id="total-price">0.00</span> руб.
+          </div>
+          <button id="clear-cart">Очистить корзину</button>
         </div>
-        <div class="row-container">
-            <div class="others">
-                <h2 for="custom-tip">Введите чаевые:</h2>
-                <input type="number"
-                       id="custom-tip"
-                       min="0"
-                       step=".01"
-                       value="0.00" />
-                <h2 for="receipt-recieve">Кто получит чек:</h2>
-                <select name="receipt-select" id="receipt-recieve">
-                    <option value="Both">Оба</option>
-                    <option value="Customer">Покупатель</option>
-                    <option value="Merchant">Продавец</option>
-                </select>
-            </div>
+        <div class="others">
+          <h3 for="custom-tip">Введите чаевые:</h3>
+          <input
+            type="number"
+            id="custom-tip"
+            min="0"
+            step=".01"
+            value="0.00"
+          />
+          <h3 for="payment-type">Вид оплаты:</h3>
+          <select name="payment-select" id="payment-type">
+            <option value="Credit">Кредитная карта</option>
+            <option value="Debit">Дебетовая карта</option>
+            <option value="Cash">Наличные</option>
+            <option value="Check">Чек</option>
+            <option value="Card">Card</option>
+            <option value="Gift">Подарочная карта</option>
+            <option value="EBT_Food">EBT Еда</option>
+            <option value="EBT_Cash">EBT Наличные</option>
+          </select>
+          <h3 for="receipt-recieve">Кто получит чек:</h3>
+          <select name="receipt-select" id="receipt-recieve">
+            <option value="Both">Оба</option>
+            <option value="Customer">Покупатель</option>
+            <option value="Merchant">Продавец</option>
+            <option value="No">Никто</option>
+          </select>
         </div>
-        <button id="sendRequest">Отправить запрос</button>
+      </div>
+      <button id="send-request" class="request-button">Отправить запрос</button>
     </div>
-    <div id="saleResponse" class="row-container"></div>
-    <script src="js/script.js">
-    </script>
-</body>
+    <div class="container">
+      <div class="row-container">
+        <div class="req-container">
+          <div class="request-title">Запрос:</div>
+          <div id="sale-request" class="sale-response"></div>
+        </div>
+        <div class="req-container">
+          <div class="request-title">Ответ:</div>
+          <div id="sale-response" class="sale-response"></div>
+        </div>
+      </div>
+    </div>
+    <script src="js/script.js"></script>
+  </body>
 </html>
