@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Виртуальная касса</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro"
+      rel="stylesheet"
+      type="text/css"
+    />
   </head>
   <body>
     <div class="container">
-      <h1>Виртуальная касса</h1>
+      <div class="header">
+        <h1>Виртуальная касса</h1>
+      </div>
       <div class="row-container settings-container">
         TPN:
         <input type="text" id="tpn-input" />
@@ -17,86 +24,150 @@
         Порт:
         <input type="text" id="port-input" />
       </div>
-      <div class="row-container">
-        <div class="products">
-          <h2>Товары</h2>
-          <nav>
-            <ul id="products-list" class="products-list"></ul>
-          </nav>
-        </div>
-        <div class="cart">
-          <h2>Корзина</h2>
-          <nav>
-            <ol id="cart-list" class="cart-list"></ol>
-          </nav>
-          <div class="total">
-            <p>Итого:</p>
-            <span id="total-price">0.00</span> руб.
-          </div>
-          <button id="clear-cart">Очистить корзину</button>
-        </div>
-        <div class="others">
-          <h3 for="custom-tip">Введите чаевые:</h3>
-          <input
-            type="number"
-            id="custom-tip"
-            min="0"
-            step=".01"
-            value="0.00"
-          />
-          <h3 for="payment-type">Вид оплаты:</h3>
-          <select name="payment-select" id="payment-type">
-            <option value="Credit">Кредитная карта</option>
-            <option value="Debit">Дебетовая карта</option>
-            <option value="Cash">Наличные</option>
-            <option value="Check">Чек</option>
-            <option value="Card">Card</option>
-            <option value="Gift">Подарочная карта</option>
-            <option value="EBT_Food">EBT Еда</option>
-            <option value="EBT_Cash">EBT Наличные</option>
-          </select>
-          <h3 for="receipt-recieve">Кто получит чек:</h3>
-          <select name="receipt-select" id="receipt-recieve">
-            <option value="Both">Оба</option>
-            <option value="Customer">Покупатель</option>
-            <option value="Merchant">Продавец</option>
-            <option value="No">Никто</option>
-          </select>
-        </div>
-      </div>
-      <button id="send-request" class="request-button">Отправить запрос</button>
     </div>
     <div class="container">
-      <div class="row-container">
-        <div class="request-container">
-          <div class="request-title"><b>Запрос:</b></div>
-          <div id="sale-request" class="show-field sale-request"></div>
+      <div class="main-tab">
+        <button class="main-tablinks" onclick="openMainTab(event, 'saleTab')">
+          <b>Проведение транзакции</b>
+        </button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'statusTab')">
+          <b>Просмотр транзакций</b>
+        </button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'settleTab')" id="defaultOpenMainTab">
+          <b>Закрытие</b>
+        </button>
+      </div>
+    </div>
+    <div class="main-tabcontent" id="saleTab">
+      <div class="container">
+        <div class="row-container">
+          <div class="products">
+            <h2>Товары</h2>
+            <nav>
+              <ul id="products-list" class="products-list"></ul>
+            </nav>
+          </div>
+          <div class="cart">
+            <h2>Корзина</h2>
+            <nav>
+              <ol id="cart-list" class="cart-list"></ol>
+            </nav>
+            <div class="total">
+              <p>Итого:</p>
+              <b><span id="total-price" class="">0.00</span></b> руб.
+            </div>
+            <button id="clear-cart">Очистить корзину</button>
+          </div>
+          <div class="others">
+            <h2 for="custom-tip">Чаевые:</h2>
+            <input
+              type="number"
+              id="custom-tip"
+              min="0"
+              step=".01"
+              value="0.00"
+            />
+            руб.
+            <h2 for="payment-type">Вид оплаты:</h2>
+            <select name="payment-select" id="payment-type">
+              <option value="Credit">Кредитная карта</option>
+              <option value="Debit">Дебетовая карта</option>
+              <option value="Cash">Наличные</option>
+              <option value="Check">Чек</option>
+              <option value="Card">Card</option>
+              <option value="Gift">Подарочная карта</option>
+              <option value="EBT_Food">EBT Еда</option>
+              <option value="EBT_Cash">EBT Наличные</option>
+            </select>
+            <h2 for="receipt-recieve">Отобразить чек для:</h2>
+            <select name="receipt-select" id="receipt-recieve">
+              <option value="Both">Оба</option>
+              <option value="Customer">Покупатель</option>
+              <option value="Merchant">Продавец</option>
+              <option value="No">Никто</option>
+            </select>
+            <h2 for="receipt-print">Напечатать чек для:</h2>
+            <select name="receipt-print-select" id="receipt-print">
+              <option value="Both">Оба</option>
+              <option value="Customer">Покупатель</option>
+              <option value="Merchant">Продавец</option>
+              <option value="No">Никто</option>
+            </select>
+          </div>
         </div>
-        <div class="req-container">
-          <div class="tab">
-            <button class="tablinks" onclick="openResponse(event, 'jsonResponse')" id="defaultOpen">
-              <b>Ответ в JSON</b>
-            </button>
-            <button class="tablinks" onclick="openResponse(event, 'textResponse')">
-              <b>Текстовый ответ</b>
-            </button>
+        <button id="send-sale-request" class="request-button">
+          Отправить запрос
+        </button>
+      </div>
+      <div class="container">
+        <div class="row-container">
+          <div class="request-container">
+            <div class="info-title"><b>Запрос:</b></div>
+            <div id="sale-request" class="request-field sale-request"></div>
           </div>
-          <div id="jsonResponse" class="tabcontent">
-            <div id="sale-response" class="show-field sale-response"></div>
+          <div id="jsonResponse" class="request-container">
+            <div class="info-title"><b>JSON ответ</b></div>
+            <div id="sale-response" class="request-field sale-response"></div>
           </div>
-          <div id="textResponse" class="tabcontent">
-            <div id="sale-response-text" class="show-field sale-response"></div>
+        </div>
+        <div class="row-container">
+          <div class="receipt-container">
+            <div id="textResponse">
+              <div class="info-title"><b>Текстовый ответ:</b></div>
+              <div
+                id="sale-response-text"
+                class="request-field sale-response-text"
+              ></div>
+            </div>
+          </div>
+          <div class="receipt-container">
+            <div class="info-title"><b>Чек продавца:</b></div>
+            <div id="receipt-merchant" class="receipt-field"></div>
+          </div>
+          <div class="receipt-container">
+            <div class="info-title"><b>Чек покупателя:</b></div>
+            <div id="receipt-customer" class="receipt-field"></div>
           </div>
         </div>
       </div>
-      <div class="receipt-container row-container">
-        <div class="receipt-container">
-          <div class="request-title"><b>Чек продавца:</b></div>
-          <div id="receipt-merchant" class="show-field receipt"></div>
+    </div>
+    <div class="main-tabcontent" id="statusTab"></div>
+    <div class="main-tabcontent" id="settleTab">
+      <div class="container">
+        <div class="row-container">
+          <div class="settle-field">
+            <h2 for="settle-timeout">Максимальное время ожидания:</h2>
+            <input type="number" id="settle-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+            сек.
+            <h2 for="settle-is-receipt">Получение чека:</h2>
+            <select name="settle-receipt-select" id="settle-is-receipt">
+              <option value="true">Да</option>
+              <option value="false">Нет</option>
+            </select>
+          </div>
         </div>
-        <div class="receipt-container">
-          <div class="request-title"><b>Чек покупателя:</b></div>
-          <div id="receipt-customer" class="show-field receipt"></div>
+        <button id="send-settle-request" class="request-button">
+          Отправить запрос
+        </button>
+        <div class="row-container">
+          <div class="request-container">
+            <div class="info-title"><b>Запрос:</b></div>
+            <div id="settle-request" class="request-field sale-request"></div>
+          </div>
+          <div id="jsonResponse" class="request-container">
+            <div class="info-title"><b>JSON ответ</b></div>
+            <div id="settle-response" class="request-field sale-response"></div>
+          </div>
+        </div>
+        <div class="row-container">
+          <div class="request-container">
+            <div class="info-title"><b>Текстовый ответ:</b></div>
+            <div id="settle-response-text" class="request-field sale-request"></div>
+          </div>
+          <div id="jsonResponse" class="request-container">
+            <div class="info-title"><b>Чек:</b></div>
+            <div id="settle-receipt" class="request-field sale-response"></div>
+          </div>
         </div>
       </div>
     </div>

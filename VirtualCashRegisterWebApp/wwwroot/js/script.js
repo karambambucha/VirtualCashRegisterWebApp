@@ -61,7 +61,7 @@ clearCartButton.onclick = () => {
   cartList.innerHTML = "";
   updateTotalPrice();
 };
-document.getElementById("send-request").addEventListener("click", sendSaleRequest);
+document.getElementById("send-sale-request").addEventListener("click", sendSaleRequest);
 async function sendSaleRequest() {
     if (document.getElementById("cart-list").getElementsByTagName("li").length > 0) {
         document.getElementById("sale-response").innerText = "";
@@ -69,13 +69,14 @@ async function sendSaleRequest() {
         document.getElementById("receipt-customer").innerText = "";
         document.getElementById("receipt-merchant").innerText = "";
         var receiptSelect = document.getElementById("receipt-recieve");
+        var receiptPrintSelect = document.getElementById("receipt-print");
         var paymentSelect = document.getElementById("payment-type");
         var obj = {
             Amount: document.getElementById("total-price").innerHTML,
             TipAmount: document.getElementById("custom-tip").value,
             PaymentType: paymentSelect.options[paymentSelect.selectedIndex].value,
             ReferenceId: generateGUID(),
-            PrintReceipt: "No",
+            PrintReceipt: receiptPrintSelect.options[receiptPrintSelect.selectedIndex].value,
             GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
             InvoiceNumber: "10",
             Tpn: document.getElementById("tpn-input").value,
@@ -96,8 +97,6 @@ async function sendSaleRequest() {
     else {
         alert("Корзина пуста!");
     }
-    
-    
 };
 function deserializeJsonSaleResponse(json) {
     if (json.hasOwnProperty("Receipts")) {
@@ -124,14 +123,14 @@ function deserializeJsonSaleResponse(json) {
     document.getElementById("sale-response-text").innerText = GeneralResponse;
 }
 
-function openResponse(evt, checkName) {
+function openMainTab(evt, checkName) {
   var i, tabcontent, tablinks;
 
-  tabcontent = document.getElementsByClassName("tabcontent");
+  tabcontent = document.getElementsByClassName("main-tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
-  tablinks = document.getElementsByClassName("tablinks");
+  tablinks = document.getElementsByClassName("main-tablinks");
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
@@ -139,4 +138,51 @@ function openResponse(evt, checkName) {
   document.getElementById(checkName).style.display = "block";
   evt.currentTarget.className += " active";
 }
-document.getElementById("defaultOpen").click();
+
+document.getElementById("defaultOpenMainTab").click();
+
+document.getElementById("send-settle-request").addEventListener("click", sendSettleRequest);
+async function sendSettleRequest() {
+    document.getElementById("settle-response").innerText = "";
+    document.getElementById("settle-response-text").innerText = "";
+    document.getElementById("settle-receipt").innerText = "";
+    var receiptSettleSelect = document.getElementById("settle-is-receipt");
+    var obj = {
+        ReferenceId: "string",
+        GetReceipt: (receiptSettleSelect.options[receiptSettleSelect.selectedIndex].value === 'true'),
+        SPInProxyTimeout : document.getElementById("settle-timeout").value,
+        SettlementType: "Close",
+        Tpn: document.getElementById("tpn-input").value,
+        Authkey: document.getElementById("auth-key-input").value
+    };
+    var requestBody = JSON.stringify(obj, null, 4);
+    document.getElementById("settle-request").innerText = requestBody;
+    const response = await fetch("/api/user/Settle", {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: requestBody
+    });
+    const message = await response.json();
+    document.getElementById("settle-response").innerText = message.text;
+    const json = JSON.parse(message.text);
+    deserializeJsonSettleResponse(json);
+};
+
+function deserializeJsonSettleResponse(json)
+{
+  let GeneralResponse = `ЗАКРЫТИЕ СМЕНЫ
+  Ответ: ${json.GeneralResponse.Message}
+  Детальный ответ: ${json.GeneralResponse.DetailedMessage}
+  Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
+  settleDetails = json.SettleDetails[0];
+  GeneralResponse +=  `Приложение: ${settleDetails.Application}
+  Сообщение: ${settleDetails.DetailedMessage}, статус хоста: ${settleDetails.HostStatus}\n`;
+  transactionsReports = settleDetails.TransactionsReports;
+  GeneralResponse += `Всего транзакций в смене: ${transactionsReports.TransactionsCount}
+  Продано на ${transactionsReports.SaleAmount} руб., на возврат: ${transactionsReports.ReturnAmount} руб., отменено транзакции на ${transactionsReports.VoidAmount} руб.
+  Всего: ${transactionsReports.TotalAmount} руб.`
+  var receiptSettleSelect = document.getElementById("settle-is-receipt");
+  if(receiptSettleSelect.options[receiptSettleSelect.selectedIndex].value === 'true')
+    document.getElementById("settle-receipt").innerHTML = settleDetails.Receipt;
+  document.getElementById("settle-response-text").innerText = GeneralResponse;
+}
