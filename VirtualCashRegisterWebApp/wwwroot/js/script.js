@@ -63,33 +63,43 @@ clearCartButton.onclick = () => {
 };
 document.getElementById("send-request").addEventListener("click", sendSaleRequest);
 async function sendSaleRequest() {
-    document.getElementById("sale-response").innerText = "";
-    document.getElementById("receipt-customer").innerText = "";
-    document.getElementById("receipt-merchant").innerText = "";
-    var receiptSelect = document.getElementById("receipt-recieve");
-    var paymentSelect = document.getElementById("payment-type");
-    var obj = {
-        Amount: document.getElementById("total-price").innerHTML,
-        TipAmount: document.getElementById("custom-tip").value,
-        PaymentType: paymentSelect.options[paymentSelect.selectedIndex].value,
-        ReferenceId: generateGUID(),
-        PrintReceipt: "No",
-        GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
-        InvoiceNumber: "10",
-        Tpn: document.getElementById("tpn-input").value,
-        Authkey: document.getElementById("auth-key-input").value
-    };
-    var requestBody = JSON.stringify(obj, null, 4);
-    document.getElementById("sale-request").innerText = requestBody;
-    const response = await fetch("/api/user/Sale", {
-        method: "POST",
-        headers: { "Accept": "application/json", "Content-Type": "application/json" },
-        body: requestBody
-    });
-    const message = await response.json();
-    document.getElementById("sale-response").innerText = message.text;
-    const json = JSON.parse(message.text);
-
+    if (document.getElementById("cart-list").getElementsByTagName("li").length > 0) {
+        document.getElementById("sale-response").innerText = "";
+        document.getElementById("sale-response-text").innerText = "";
+        document.getElementById("receipt-customer").innerText = "";
+        document.getElementById("receipt-merchant").innerText = "";
+        var receiptSelect = document.getElementById("receipt-recieve");
+        var paymentSelect = document.getElementById("payment-type");
+        var obj = {
+            Amount: document.getElementById("total-price").innerHTML,
+            TipAmount: document.getElementById("custom-tip").value,
+            PaymentType: paymentSelect.options[paymentSelect.selectedIndex].value,
+            ReferenceId: generateGUID(),
+            PrintReceipt: "No",
+            GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
+            InvoiceNumber: "10",
+            Tpn: document.getElementById("tpn-input").value,
+            Authkey: document.getElementById("auth-key-input").value
+        };
+        var requestBody = JSON.stringify(obj, null, 4);
+        document.getElementById("sale-request").innerText = requestBody;
+        const response = await fetch("/api/user/Sale", {
+            method: "POST",
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: requestBody
+        });
+        const message = await response.json();
+        document.getElementById("sale-response").innerText = message.text;
+        const json = JSON.parse(message.text);
+        deserializeJsonSaleResponse(json);
+    }
+    else {
+        alert("Корзина пуста!");
+    }
+    
+    
+};
+function deserializeJsonSaleResponse(json) {
     if (json.hasOwnProperty("Receipts")) {
         receipts = json.Receipts;
         if (receipts.hasOwnProperty("Customer"))
@@ -97,9 +107,6 @@ async function sendSaleRequest() {
         if (receipts.hasOwnProperty("Merchant"))
             document.getElementById("receipt-merchant").innerHTML = json.Receipts.Merchant;
     }
-    document.getElementById("sale-response-text").innerText = deserializeJsonSaleResponse(json);
-};
-function deserializeJsonSaleResponse(json) {
     let GeneralResponse = `Ответ: ${json.GeneralResponse.Message}
     Детальный ответ: ${json.GeneralResponse.DetailedMessage}
     Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
@@ -114,7 +121,7 @@ function deserializeJsonSaleResponse(json) {
         GeneralResponse += `Платежная система: ${json.CardData.CardType}\nСпособ оплаты: ${json.CardData.EntryType}
         Номер карты: ${json.CardData.First4} **** **** ${json.CardData.Last4}\nБИН: ${json.CardData.BIN}
         Имя владельца: ${json.CardData.Name}`;
-    return GeneralResponse;
+    document.getElementById("sale-response-text").innerText = GeneralResponse;
 }
 
 function openResponse(evt, checkName) {
@@ -132,6 +139,4 @@ function openResponse(evt, checkName) {
   document.getElementById(checkName).style.display = "block";
   evt.currentTarget.className += " active";
 }
-document.getElementById("defaultOpen").click();
-
 document.getElementById("defaultOpen").click();
