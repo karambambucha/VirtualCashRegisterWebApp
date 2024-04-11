@@ -8,16 +8,16 @@ h1 {
   margin-left: 20px;
   color: #eeeeee;
 }
-h2{
-  margin:10px 0px;
+h2 {
+  margin: 10px 0px;
 }
 input,
 select {
   margin-left: 10px;
   margin-right: 10px;
   font-size: 15px;
-  height:25px;
-  width:max-content;
+  height: 25px;
+  width: max-content;
 }
 ul {
   list-style: none;
@@ -48,7 +48,7 @@ nav ol {
   overflow-y: scroll;
 }
 .header {
-  width:1355px;
+  width: 1355px;
   background-color: #47a80f;
   margin-bottom: 20px;
 }
@@ -89,8 +89,7 @@ nav ol {
 .sale-response {
   width: 750px;
 }
-.sale-response-text
-{
+.sale-response-text {
   width: 500px;
 }
 .total {
@@ -98,8 +97,14 @@ nav ol {
   margin-top: 10px;
   font-size: 20px;
 }
-.info-title
-{
+.check-connect-button {
+  margin-top: 0px;
+}
+.connect-status {
+  margin-top: 6px;
+  margin-left: 6px;
+}
+.info-title {
   font-size: 20px;
 }
 .products,
@@ -111,8 +116,7 @@ nav ol {
   border: 1px solid #ddd;
   margin: 5px;
 }
-.settle-field
-{
+.settle-field {
   width: 400px;
   height: 200px;
   padding: 20px;
@@ -124,9 +128,9 @@ nav ol {
   color: #f5f4f4;
   margin-bottom: 20px;
   margin-top: 5px;
-  width:1355px;
-  height:50px;
-  font-size: 20px;;
+  width: 1355px;
+  height: 50px;
+  font-size: 20px;
 }
 
 .main-tab {
@@ -158,9 +162,16 @@ nav ol {
 }
 
 @media (max-width: 1355px) {
-  body{
-    font-size: 1vmax;
+  body {
+    font-size: 2.5vh;
     text-align: center;
+  }
+  button {
+    font-size: 2vh;
+  }
+  input,
+  select {
+    height: 3vh;
   }
   .row-container {
     display: flex;
@@ -168,7 +179,10 @@ nav ol {
     align-items: center;
   }
   .header {
-    width: 95vw;
+    width: 90vw;
+    font-size: 5vmin;
+    text-align: center;
+    margin: 0px;
   }
   .products,
   .cart,
@@ -176,29 +190,45 @@ nav ol {
   .request-field,
   .receipt-field,
   .settle-field {
-    width:95vw;
+    width: 80vw;
+    font-size: 2vh;
+  }
+  .total{
+    font-size: 3vh;
+  }
+  .request-field,
+  .receipt-field,
+  .settle-field {
+    text-align: left;
   }
   .products {
-    height: 300px;
+    height: 30vh;
+  }
+  .settle-field {
+    height: 30vh;
   }
   .products-list {
-    height: 200px;
+    height: 20vh;
   }
   .cart {
-    height: 370px;
+    height: 45vh;
   }
   .cart-list {
-    height: 150px;
+    height: 20vh;
   }
-  .others{
-    height:500px;
+  .others {
+    height: 45vh;
+    align-items: center;
   }
-  .request-button
-  {
-    height:50px;
-    font-size: 30px;
+  .check-connect-button {
+    margin-top: 20px;
+  }
+  .request-button {
+    height: 5vh;
+    font-size: 2.5vmax;
+    width: 85vw;
   }
   .main-tab {
-    width: 95%
+    width: 90vw;
   }
 }

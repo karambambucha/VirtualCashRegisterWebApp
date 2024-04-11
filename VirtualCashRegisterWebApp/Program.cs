@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -79,6 +80,24 @@ app.Run(async (context) =>
         await response.WriteAsJsonAsync(new { text = message });
 
     }
+    else if(request.Path == "/api/user/TerminalStatus")
+    {
+        try
+        {
+            using (var httpClient = new HttpClient())
+            {
+                string url = "https://test.spinpos.net/spin/v2/Common/TerminalStatus" + request.QueryString;
+                using HttpResponseMessage jsonMessage = await httpClient.GetAsync(url);
+                var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
+                message = jsonResponse;
+            }
+        }
+        catch (Exception e)
+        {
+            message = e.Message;
+        }
+        await response.WriteAsJsonAsync(new { text = message });
+    }
     else
     {
         response.ContentType = "text/html; charset=utf-8";
@@ -90,3 +109,4 @@ app.Run();
 
 public record SaleRequest(string Amount, string TipAmount, string PaymentType, string ReferenceId, string PrintReceipt, string GetReceipt, string InvoiceNumber, string Tpn, string AuthKey);
 public record SettleRequest(string ReferenceId, bool GetReceipt, string SettlementType, string Tpn, string AuthKey, int SPInProxyTimeout);
+public record TerminalStatusRequest(string Tpn, int AuthKey);
