@@ -84,28 +84,12 @@ app.Run(async (context) =>
     {
         try
         {
-            var settleRequest = await request.ReadFromJsonAsync<SettleRequest>();
-            if (settleRequest != null)
+            using (var httpClient = new HttpClient())
             {
-                using (var httpClient = new HttpClient())
-                {
-                    using StringContent jsonContent = new(
-                    System.Text.Json.JsonSerializer.Serialize(new
-                    {
-                        settleRequest.ReferenceId,
-                        settleRequest.GetReceipt,
-                        settleRequest.SettlementType,
-                        settleRequest.Tpn,
-                        settleRequest.AuthKey,
-                        settleRequest.SPInProxyTimeout
-                    }),
-                    Encoding.UTF8,
-                    "application/json");
-
-                    using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Settle", jsonContent);
-                    var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-                    message = JsonConvert.DeserializeObject(jsonResponse).ToString();
-                }
+                string url = "https://test.spinpos.net/spin/v2/Common/TerminalStatus" + request.QueryString;
+                using HttpResponseMessage jsonMessage = await httpClient.GetAsync(url);
+                var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
+                message = jsonResponse;
             }
         }
         catch (Exception e)

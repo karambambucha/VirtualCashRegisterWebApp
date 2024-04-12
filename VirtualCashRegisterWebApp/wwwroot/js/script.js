@@ -116,28 +116,28 @@ async function sendSaleRequest() {
   }
 }
 function deserializeJsonSaleResponse(json) {
-  let GeneralResponse = `Ответ: ${json.GeneralResponse.Message}
+  let response = `Ответ: ${json.GeneralResponse.Message}
     Детальный ответ: ${json.GeneralResponse.DetailedMessage}
     Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
   if (json.GeneralResponse.ResultCode == 0) {
     if (json.hasOwnProperty("Amounts"))
-      GeneralResponse += `Полная цена: ${json.Amounts.TotalAmount} руб., себестоимость: ${json.Amounts.Amount} руб., 
+      response += `Полная цена: ${json.Amounts.TotalAmount} руб., себестоимость: ${json.Amounts.Amount} руб., 
         чаевые: ${json.Amounts.TipAmount} руб., взнос: ${json.Amounts.FeeAmount} руб., налоги: ${json.Amounts.TaxAmount} руб.\n`;
     if (json.hasOwnProperty("ReferenceId"))
-      GeneralResponse += `ID транзакции: ${json.ReferenceId}\n\n`;
+      response += `ID транзакции: ${json.ReferenceId}\n\n`;
     if (json.hasOwnProperty("Voided")) {
-      GeneralResponse += "Отменено: ";
-      GeneralResponse +=
+      response += "Отменено: ";
+      response +=
         json.hasOwnProperty("Voided") === false ? "Да\n\n" : "Нет\n\n";
     }
     if (json.hasOwnProperty("PaymentType"))
-      GeneralResponse += `Вид оплаты: ${json.PaymentType}\n`;
+      response += `Вид оплаты: ${json.PaymentType}\n`;
     if (json.hasOwnProperty("CardData"))
-      GeneralResponse += `Платежная система: ${json.CardData.CardType}\nСпособ оплаты: ${json.CardData.EntryType}
+      response += `Платежная система: ${json.CardData.CardType}\nСпособ оплаты: ${json.CardData.EntryType}
         Номер карты: ${json.CardData.First4} **** **** ${json.CardData.Last4}\nБИН: ${json.CardData.BIN}
         Имя владельца: ${json.CardData.Name}`;
   }
-  return GeneralResponse;
+  return response;
 }
 
 function openMainTab(evt, checkName) {
@@ -190,15 +190,15 @@ async function sendSettleRequest() {
 }
 
 function deserializeJsonSettleResponse(json) {
-  let GeneralResponse = `ЗАКРЫТИЕ СМЕНЫ
+  let response = `ЗАКРЫТИЕ СМЕНЫ
   Ответ: ${json.GeneralResponse.Message}
   Детальный ответ: ${json.GeneralResponse.DetailedMessage}
   Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
   settleDetails = json.SettleDetails[0];
-  GeneralResponse += `Приложение: ${settleDetails.Application}
+  response += `Приложение: ${settleDetails.Application}
   Сообщение: ${settleDetails.DetailedMessage}, статус хоста: ${settleDetails.HostStatus}\n`;
   transactionsReports = settleDetails.TransactionsReports;
-  GeneralResponse += `Всего транзакций в смене: ${transactionsReports.TransactionsCount}
+  response += `Всего транзакций в смене: ${transactionsReports.TransactionsCount}
   Продано на ${transactionsReports.SaleAmount} руб., на возврат: ${transactionsReports.ReturnAmount} руб., отменено транзакции на ${transactionsReports.VoidAmount} руб.
   Всего: ${transactionsReports.TotalAmount} руб.`;
   var receiptSettleSelect = document.getElementById("settle-is-receipt");
@@ -207,7 +207,7 @@ function deserializeJsonSettleResponse(json) {
     "true"
   )
     document.getElementById("settle-receipt").innerHTML = settleDetails.Receipt;
-  document.getElementById("settle-response-text").innerText = GeneralResponse;
+  document.getElementById("settle-response-text").innerText = response;
 }
 
 document
@@ -225,7 +225,10 @@ async function sendTerminalStatusRequest() {
   const json = JSON.parse(message.text);
   if (json.TerminalStatus == "Online")
     statusText.innerHTML = "Терминал подключен!";
-  else statusText.innerHTML = "Терминал не подключен";
+  else if (json.TerminalStatus == "Offline")
+    statusText.innerHTML = "Терминал не подключен";
+  else
+    statusText.innerHTML = "Терминал не найден!";
 }
 
 document
@@ -255,21 +258,21 @@ async function sendStatusListRequest() {
 }
 
 function deserializeJsonStatusListResponse(json) {
-  let Response = `ПРОСМОТР ТРАНЗАКЦИИ НА СМЕНЕ
+  let response = `ПРОСМОТР ТРАНЗАКЦИИ НА СМЕНЕ
     Ответ: ${json.GeneralResponse.Message}
     Детальный ответ: ${json.GeneralResponse.DetailedMessage}
     Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
   if (json.hasOwnProperty("Transactions")) {
-    Response += `Всего получено транзакций: ${json.Transactions.length}\n\n`;
+    response += `Всего получено транзакций: ${json.Transactions.length}\n\n`;
     var transactions = json.Transactions;
     transactions.forEach((jsonObject) => {
-      Response += `Номер транзакции в смене: ${jsonObject.TransactionNumber}`;
-      Response += "\n=======================\n\n";
-      Response += deserializeJsonSaleResponse(jsonObject);
-      Response += "\n=======================\n\n\n\n";
+      response += `Номер транзакции в смене: ${jsonObject.TransactionNumber}`;
+      response += "\n=======================\n\n";
+      response += deserializeJsonSaleResponse(jsonObject);
+      response += "\n=======================\n\n\n\n";
     });
   }
-  document.getElementById("status-list-response-text").innerText = Response;
+  document.getElementById("status-list-response-text").innerText = response;
 }
 
 document

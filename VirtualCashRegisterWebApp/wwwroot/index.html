@@ -22,8 +22,8 @@
         Ключ:
         <input type="text" id="auth-key-input" />
         <button class="check-connect-button" id="check-connect">Проверить соединение</button>
-        <p class="connect-status" id="connect-status"></p>
       </div>
+      <div class="connect-status" id="connect-status"></div>
     </div>
     <div class="container">
       <div class="main-tab">
@@ -173,7 +173,7 @@
             <h2 for="status-timeout">ID транзакции:</h2>
             <input id="status-reference-id"/>
             <h2 for="status-timeout">Максимальное время ожидания:</h2>
-            <input type="number" id="status-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+            <input type="number" id="status-timeout" min="1" max="720" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
             сек.
           </div>
         </div>
@@ -223,7 +223,7 @@
               <option value="false">Нет</option>
             </select>
             <h2 for="settle-timeout">Максимальное время ожидания:</h2>
-            <input type="number" id="settle-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+            <input type="number" id="settle-timeout" min="1" max="720" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
             сек.
           </div>
         </div>

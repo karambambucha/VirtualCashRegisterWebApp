@@ -101,8 +101,7 @@ nav ol {
   margin-top: 0px;
 }
 .connect-status {
-  margin-top: 6px;
-  margin-left: 6px;
+  height:20px;
 }
 .info-title {
   font-size: 20px;
@@ -193,7 +192,7 @@ nav ol {
     width: 80vw;
     font-size: 2vh;
   }
-  .total{
+  .total {
     font-size: 3vh;
   }
   .request-field,
