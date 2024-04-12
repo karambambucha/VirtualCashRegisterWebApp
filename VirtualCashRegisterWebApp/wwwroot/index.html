@@ -12,28 +12,28 @@
     />
   </head>
   <body>
+    <div class="header">
+      <p class="header-title">Виртуальная касса</p>
+    </div>
     <div class="container">
-      <div class="header">
-        <h1>Виртуальная касса</h1>
-      </div>
       <div class="row-container settings-container">
-        TPN:
-        <input type="text" id="tpn-input" />
-        Ключ:
-        <input type="text" id="auth-key-input" />
+        <div class="settings-label">TPN:</div>
+        <input type="text" id="tpn-input" class="settings-input"/>
+        <div class="settings-label">Ключ: </div>
+        <input type="text" id="auth-key-input"  class="settings-input"/>
         <button class="check-connect-button" id="check-connect">Проверить соединение</button>
       </div>
       <div class="connect-status" id="connect-status"></div>
     </div>
     <div class="container">
       <div class="main-tab">
-        <button class="main-tablinks" onclick="openMainTab(event, 'saleTab')">
+        <button class="main-tablinks" onclick="openMainTab(event, 'saleTab')" id="defaultOpenMainTab">
           <b>Проведение транзакции</b>
         </button>
         <button class="main-tablinks" onclick="openMainTab(event, 'statusListTab')">
           <b>Просмотр транзакций</b>
         </button>
-        <button class="main-tablinks" onclick="openMainTab(event, 'statusTab')" id="defaultOpenMainTab">
+        <button class="main-tablinks" onclick="openMainTab(event, 'statusTab')">
           <b>Просмотр одной транзакции</b>
         </button>
         <button class="main-tablinks" onclick="openMainTab(event, 'settleTab')">
@@ -138,7 +138,7 @@
     <div class="main-tabcontent" id="statusListTab">
         <div class="container">
             <div class="row-container">
-                <div class="settle-field">
+                <div class="single-field">
                     <h2 for="status-list-from">Просмотреть транзакции от:</h2>
                     <input type="number" id="status-list-from" min="1" max="5000" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                     <h2 for="status-list-to">До:</h2>
@@ -169,7 +169,7 @@
     <div class="main-tabcontent" id="statusTab">
       <div class="container">
         <div class="row-container">
-          <div class="settle-field">
+          <div class="single-field">
             <h2 for="status-timeout">ID транзакции:</h2>
             <input id="status-reference-id"/>
             <h2 for="status-timeout">Максимальное время ожидания:</h2>
@@ -216,7 +216,7 @@
     <div class="main-tabcontent" id="settleTab">
       <div class="container">
         <div class="row-container">
-          <div class="settle-field">
+          <div class="single-field">
             <h2 for="settle-is-receipt">Получение чека:</h2>
             <select name="settle-receipt-select" id="settle-is-receipt">
               <option value="true">Да</option>

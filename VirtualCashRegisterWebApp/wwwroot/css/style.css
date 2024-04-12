@@ -1,23 +1,42 @@
-body {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+body, select, input {
   font-family: "Source Sans Pro", sans-serif;
+}
+body{
+  background: #F5F7FA;
 }
 html {
   overflow-y: scroll;
-}
-h1 {
-  margin-left: 20px;
-  color: #eeeeee;
 }
 h2 {
   margin: 10px 0px;
 }
 input,
 select {
-  margin-left: 10px;
-  margin-right: 10px;
   font-size: 15px;
-  height: 25px;
-  width: max-content;
+  width: 200px;
+  height: 30px;
+  margin: 2px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 ul {
   list-style: none;
@@ -26,8 +45,10 @@ ul {
 li {
   margin-bottom: 10px;
   padding: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #ececec;
+  background: #ffffff;
   border-radius: 5px;
+  text-align: left;
 }
 button {
   margin-top: 5px;
@@ -37,10 +58,12 @@ button {
   border: 1px solid #ddd;
   border-radius: 5px;
   cursor: pointer;
+  background: #EDF1F2;
 }
 nav ul,
 nav ol {
   height: 250px;
+  padding:5px 5px 5px 20px;
 }
 nav ul,
 nav ol {
@@ -48,9 +71,15 @@ nav ol {
   overflow-y: scroll;
 }
 .header {
-  width: 1355px;
-  background-color: #47a80f;
-  margin-bottom: 20px;
+  background: #2E9F83;
+  color: #eeeeee;
+  line-height: 60px;
+}
+.header-title
+{
+  text-align: left;
+  font-size: 25px;
+  margin-left: 60px;
 }
 .container {
   display: flex;
@@ -63,6 +92,27 @@ nav ol {
 }
 .settings-container {
   margin: 5px;
+  margin-top:30px;
+}
+.settings-input {
+  margin-left: 10px;
+}
+.settings-label {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.products-list
+{
+  padding:5px;
+  height:380px;
+}
+.cart-list
+{
+  height:300px;
+}
+.check-connect-button {
+  margin-top: 2px;
+  margin-left: 10px;
 }
 .request-container,
 .receipt-container {
@@ -73,11 +123,12 @@ nav ol {
 .receipt-field {
   margin-top: 10px;
   margin-bottom: 10px;
+  padding:20px;
   border: 1px solid #ddd;
   overflow: hidden;
   overflow-y: scroll;
-  padding: 20px;
   height: 300px;
+  background: #EDF1F2;
 }
 .receipt-field {
   width: 350px;
@@ -97,45 +148,50 @@ nav ol {
   margin-top: 10px;
   font-size: 20px;
 }
-.check-connect-button {
-  margin-top: 0px;
-}
+
 .connect-status {
-  height:20px;
+  height: 30px;
 }
 .info-title {
   font-size: 20px;
 }
 .products,
 .cart,
-.others {
-  width: 400px;
-  height: 450px;
+.others,
+.settle-field,
+.single-field {
   padding: 20px;
   border: 1px solid #ddd;
   margin: 5px;
+  background: #F5F7FA;
+}
+.products,
+.cart,
+.others {
+  width: 400px;
+  height: 450px;
 }
 .settle-field {
   width: 400px;
   height: 200px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  margin: 5px;
+}
+.single-field {
+  height: 200px;
+  width: 1304px;
 }
 .request-button {
-  background-color: #47a80f;
+  background-color: #27C24C;
   color: #f5f4f4;
   margin-bottom: 20px;
   margin-top: 5px;
-  width: 1355px;
-  height: 50px;
+  width: 400px;
+  height: 40px;
   font-size: 20px;
 }
 
 .main-tab {
-  background-color: #eeeeee;
-  width: 1355px;
-  margin-top: 20px;
+  background-color: #F5F7FA;
+  width:1344px;
 }
 
 .main-tab button {
@@ -145,6 +201,11 @@ nav ol {
   outline: none;
   cursor: pointer;
   transition: 0.1s;
+  border-radius: 0px;
+  border: 1px solid #ddd;
+  color:#515253;
+  margin: 0px;
+  height: 40px;
 }
 
 .main-tab button:hover {
@@ -152,7 +213,8 @@ nav ol {
 }
 
 .main-tab button.active {
-  background-color: #ccc;
+  background-color: #fdfdfd;
+  color:#000000;
 }
 
 .main-tabcontent {
@@ -161,7 +223,7 @@ nav ol {
 }
 
 @media (max-width: 1355px) {
-  body {
+  body, h2 {
     font-size: 2.5vh;
     text-align: center;
   }
@@ -178,17 +240,21 @@ nav ol {
     align-items: center;
   }
   .header {
-    width: 90vw;
     font-size: 5vmin;
     text-align: center;
     margin: 0px;
+  }
+  .connect-status
+  {
+    height:5vh;
   }
   .products,
   .cart,
   .others,
   .request-field,
   .receipt-field,
-  .settle-field {
+  .settle-field,
+  .single-field {
     width: 80vw;
     font-size: 2vh;
   }
@@ -203,8 +269,8 @@ nav ol {
   .products {
     height: 30vh;
   }
-  .settle-field {
-    height: 30vh;
+  .single-field {
+    height: 25vh;
   }
   .products-list {
     height: 20vh;
@@ -225,7 +291,7 @@ nav ol {
   .request-button {
     height: 5vh;
     font-size: 2.5vmax;
-    width: 85vw;
+    width: 90vw;
   }
   .main-tab {
     width: 90vw;

@@ -224,11 +224,11 @@ async function sendTerminalStatusRequest() {
   const message = await response.json();
   const json = JSON.parse(message.text);
   if (json.TerminalStatus == "Online")
-    statusText.innerHTML = "Терминал подключен!";
+      statusText.innerHTML = `Терминал ${Tpn} подключен!`;
   else if (json.TerminalStatus == "Offline")
-    statusText.innerHTML = "Терминал не подключен";
+      statusText.innerHTML = `Терминал  ${Tpn} не подключен`;
   else
-    statusText.innerHTML = "Терминал не найден!";
+      statusText.innerHTML = `Терминал  ${Tpn} не найден!`;
 }
 
 document
