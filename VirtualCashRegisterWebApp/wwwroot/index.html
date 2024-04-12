@@ -30,12 +30,16 @@
         <button class="main-tablinks" onclick="openMainTab(event, 'saleTab')">
           <b>Проведение транзакции</b>
         </button>
-        <button class="main-tablinks" onclick="openMainTab(event, 'statusTab')">
+        <button class="main-tablinks" onclick="openMainTab(event, 'statusListTab')">
           <b>Просмотр транзакций</b>
         </button>
-        <button class="main-tablinks" onclick="openMainTab(event, 'settleTab')" id="defaultOpenMainTab">
+        <button class="main-tablinks" onclick="openMainTab(event, 'statusTab')" id="defaultOpenMainTab">
+          <b>Просмотр одной транзакции</b>
+        </button>
+        <button class="main-tablinks" onclick="openMainTab(event, 'settleTab')">
           <b>Закрытие</b>
         </button>
+        
       </div>
     </div>
     <div class="main-tabcontent" id="saleTab">
@@ -131,19 +135,96 @@
         </div>
       </div>
     </div>
-    <div class="main-tabcontent" id="statusTab"></div>
+    <div class="main-tabcontent" id="statusListTab">
+        <div class="container">
+            <div class="row-container">
+                <div class="settle-field">
+                    <h2 for="status-list-from">Просмотреть транзакции от:</h2>
+                    <input type="number" id="status-list-from" min="1" max="5000" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                    <h2 for="status-list-to">До:</h2>
+                    <input type="number" id="status-list-to" min="1" max="5000" step="1" value="10" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                </div>
+            </div>
+            <button id="send-status-list-request" class="request-button">
+                Отправить запрос
+            </button>
+            <div class="row-container">
+                <div class="request-container">
+                    <div class="info-title"><b>Запрос:</b></div>
+                    <div id="status-list-request" class="request-field sale-request"></div>
+                </div>
+                <div id="jsonResponse" class="request-container">
+                    <div class="info-title"><b>JSON ответ</b></div>
+                    <div id="status-list-response" class="request-field sale-response"></div>
+                </div>
+            </div>
+            <div class="row-container">
+                <div class="request-container">
+                    <div class="info-title"><b>Текстовый ответ:</b></div>
+                    <div id="status-list-response-text" class="request-field sale-request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-tabcontent" id="statusTab">
+      <div class="container">
+        <div class="row-container">
+          <div class="settle-field">
+            <h2 for="status-timeout">ID транзакции:</h2>
+            <input id="status-reference-id"/>
+            <h2 for="status-timeout">Максимальное время ожидания:</h2>
+            <input type="number" id="status-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+            сек.
+          </div>
+        </div>
+        <button id="send-status-request" class="request-button">
+          Отправить запрос
+        </button>
+      </div>
+      <div class="container">
+        <div class="row-container">
+          <div class="request-container">
+            <div class="info-title"><b>Запрос:</b></div>
+            <div id="status-request" class="request-field sale-request"></div>
+          </div>
+          <div id="jsonResponse" class="request-container">
+            <div class="info-title"><b>JSON ответ</b></div>
+            <div id="status-response" class="request-field sale-response"></div>
+          </div>
+        </div>
+        <div class="row-container">
+          <div class="receipt-container">
+            <div id="textResponse">
+              <div class="info-title"><b>Текстовый ответ:</b></div>
+              <div
+                id="status-response-text"
+                class="request-field sale-response-text"
+              ></div>
+            </div>
+          </div>
+          <div class="receipt-container">
+            <div class="info-title"><b>Чек продавца:</b></div>
+            <div id="status-receipt-merchant" class="receipt-field"></div>
+          </div>
+          <div class="receipt-container">
+            <div class="info-title"><b>Чек покупателя:</b></div>
+            <div id="status-receipt-customer" class="receipt-field"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="main-tabcontent" id="settleTab">
       <div class="container">
         <div class="row-container">
           <div class="settle-field">
-            <h2 for="settle-timeout">Максимальное время ожидания:</h2>
-            <input type="number" id="settle-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
-            сек.
             <h2 for="settle-is-receipt">Получение чека:</h2>
             <select name="settle-receipt-select" id="settle-is-receipt">
               <option value="true">Да</option>
               <option value="false">Нет</option>
             </select>
+            <h2 for="settle-timeout">Максимальное время ожидания:</h2>
+            <input type="number" id="settle-timeout" min="1" step="1" value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+            сек.
           </div>
         </div>
         <button id="send-settle-request" class="request-button">

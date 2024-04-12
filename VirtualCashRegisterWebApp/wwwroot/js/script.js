@@ -100,36 +100,44 @@ async function sendSaleRequest() {
     const message = await response.json();
     document.getElementById("sale-response").innerText = message.text;
     const json = JSON.parse(message.text);
-    deserializeJsonSaleResponse(json);
+    if (json.hasOwnProperty("Receipts")) {
+      receipts = json.Receipts;
+      if (receipts.hasOwnProperty("Customer"))
+        document.getElementById("receipt-customer").innerHTML =
+          json.Receipts.Customer;
+      if (receipts.hasOwnProperty("Merchant"))
+        document.getElementById("receipt-merchant").innerHTML =
+          json.Receipts.Merchant;
+    }
+    document.getElementById("sale-response-text").innerText =
+      deserializeJsonSaleResponse(json);
   } else {
     alert("Корзина пуста!");
   }
 }
 function deserializeJsonSaleResponse(json) {
-  if (json.hasOwnProperty("Receipts")) {
-    receipts = json.Receipts;
-    if (receipts.hasOwnProperty("Customer"))
-      document.getElementById("receipt-customer").innerHTML =
-        json.Receipts.Customer;
-    if (receipts.hasOwnProperty("Merchant"))
-      document.getElementById("receipt-merchant").innerHTML =
-        json.Receipts.Merchant;
-  }
   let GeneralResponse = `Ответ: ${json.GeneralResponse.Message}
     Детальный ответ: ${json.GeneralResponse.DetailedMessage}
     Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
-  if (json.hasOwnProperty("Amounts"))
-    GeneralResponse += `Полная цена: ${json.Amounts.TotalAmount} руб., себестоимость: ${json.Amounts.Amount} руб., 
+  if (json.GeneralResponse.ResultCode == 0) {
+    if (json.hasOwnProperty("Amounts"))
+      GeneralResponse += `Полная цена: ${json.Amounts.TotalAmount} руб., себестоимость: ${json.Amounts.Amount} руб., 
         чаевые: ${json.Amounts.TipAmount} руб., взнос: ${json.Amounts.FeeAmount} руб., налоги: ${json.Amounts.TaxAmount} руб.\n`;
-  if (json.hasOwnProperty("ReferenceId"))
-    GeneralResponse += `ID транзакции: ${json.ReferenceId}\n\n`;
-  if (json.hasOwnProperty("PaymentType"))
-    GeneralResponse += `Вид оплаты: ${json.PaymentType}\n`;
-  if (json.hasOwnProperty("CardData"))
-    GeneralResponse += `Платежная система: ${json.CardData.CardType}\nСпособ оплаты: ${json.CardData.EntryType}
+    if (json.hasOwnProperty("ReferenceId"))
+      GeneralResponse += `ID транзакции: ${json.ReferenceId}\n\n`;
+    if (json.hasOwnProperty("Voided")) {
+      GeneralResponse += "Отменено: ";
+      GeneralResponse +=
+        json.hasOwnProperty("Voided") === false ? "Да\n\n" : "Нет\n\n";
+    }
+    if (json.hasOwnProperty("PaymentType"))
+      GeneralResponse += `Вид оплаты: ${json.PaymentType}\n`;
+    if (json.hasOwnProperty("CardData"))
+      GeneralResponse += `Платежная система: ${json.CardData.CardType}\nСпособ оплаты: ${json.CardData.EntryType}
         Номер карты: ${json.CardData.First4} **** **** ${json.CardData.Last4}\nБИН: ${json.CardData.BIN}
         Имя владельца: ${json.CardData.Name}`;
-  document.getElementById("sale-response-text").innerText = GeneralResponse;
+  }
+  return GeneralResponse;
 }
 
 function openMainTab(evt, checkName) {
@@ -204,8 +212,8 @@ function deserializeJsonSettleResponse(json) {
 
 document
   .getElementById("check-connect")
-  .addEventListener("click", sendStatusRequest);
-async function sendStatusRequest() {
+  .addEventListener("click", sendTerminalStatusRequest);
+async function sendTerminalStatusRequest() {
   var statusText = document.getElementById("connect-status");
   statusText.innerHTML = "";
   var Tpn = document.getElementById("tpn-input").value;
@@ -218,4 +226,91 @@ async function sendStatusRequest() {
   if (json.TerminalStatus == "Online")
     statusText.innerHTML = "Терминал подключен!";
   else statusText.innerHTML = "Терминал не подключен";
+}
+
+document
+  .getElementById("send-status-list-request")
+  .addEventListener("click", sendStatusListRequest);
+async function sendStatusListRequest() {
+  document.getElementById("status-list-response").innerText = "";
+  document.getElementById("status-list-response-text").innerText = "";
+  var obj = {
+    PaymentType: "Credit",
+    TransactionFromIndex: document.getElementById("status-list-from").value,
+    TransactionToIndex: document.getElementById("status-list-to").value,
+    Tpn: document.getElementById("tpn-input").value,
+    AuthKey: document.getElementById("auth-key-input").value,
+  };
+  var requestBody = JSON.stringify(obj, null, 4);
+  document.getElementById("status-list-request").innerText = requestBody;
+  const response = await fetch("/api/user/StatusList", {
+    method: "POST",
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    body: requestBody,
+  });
+  const message = await response.json();
+  const json = JSON.parse(message.text);
+  document.getElementById("status-list-response").innerText = message.text;
+  deserializeJsonStatusListResponse(json);
+}
+
+function deserializeJsonStatusListResponse(json) {
+  let Response = `ПРОСМОТР ТРАНЗАКЦИИ НА СМЕНЕ
+    Ответ: ${json.GeneralResponse.Message}
+    Детальный ответ: ${json.GeneralResponse.DetailedMessage}
+    Код результата ${json.GeneralResponse.ResultCode}, код статуса: ${json.GeneralResponse.StatusCode}\n\n`;
+  if (json.hasOwnProperty("Transactions")) {
+    Response += `Всего получено транзакций: ${json.Transactions.length}\n\n`;
+    var transactions = json.Transactions;
+    transactions.forEach((jsonObject) => {
+      Response += `Номер транзакции в смене: ${jsonObject.TransactionNumber}`;
+      Response += "\n=======================\n\n";
+      Response += deserializeJsonSaleResponse(jsonObject);
+      Response += "\n=======================\n\n\n\n";
+    });
+  }
+  document.getElementById("status-list-response-text").innerText = Response;
+}
+
+document
+  .getElementById("send-status-request")
+  .addEventListener("click", sendStatusRequest);
+async function sendStatusRequest() {
+  document.getElementById("status-response").innerText = "";
+  document.getElementById("status-response-text").innerText = "";
+  document.getElementById("status-receipt-customer").innerText = "";
+  document.getElementById("status-receipt-merchant").innerText = "";
+  var obj = {
+    PaymentType: "Credit",
+    MerchantNumber: 1,
+    PrintReceipt: "Both",
+    GetReceipt: "Both",
+    ReferenceId: document.getElementById("status-reference-id").value,
+    CaptureSignature: true,
+    GetExtendedData: true,
+    Tpn: document.getElementById("tpn-input").value,
+    AuthKey: document.getElementById("auth-key-input").value,
+    SPInProxyTimeout: document.getElementById("status-timeout").value,
+  };
+  var requestBody = JSON.stringify(obj, null, 4);
+  document.getElementById("status-request").innerText = requestBody;
+  const response = await fetch("/api/user/Status", {
+    method: "POST",
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    body: requestBody,
+  });
+  const message = await response.json();
+  const json = JSON.parse(message.text);
+  document.getElementById("status-response").innerText = message.text;
+  if (json.hasOwnProperty("Receipts")) {
+    receipts = json.Receipts;
+    if (receipts.hasOwnProperty("Customer"))
+      document.getElementById("status-receipt-customer").innerHTML =
+        json.Receipts.Customer;
+    if (receipts.hasOwnProperty("Merchant"))
+      document.getElementById("status-receipt-merchant").innerHTML =
+        json.Receipts.Merchant;
+  }
+  document.getElementById("status-response-text").innerText =
+    deserializeJsonSaleResponse(json);
 }
