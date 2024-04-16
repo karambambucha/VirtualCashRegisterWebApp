@@ -6,11 +6,11 @@ const clearCartButton = document.getElementById("clear-cart");
 let products = [];
 
 fetch("products.json")
-  .then((response) => response.json())
-  .then((data) => {
-    products = data;
-    renderProducts();
-  });
+    .then((response) => response.json())
+    .then((data) => {
+        products = data;
+        renderProducts();
+    });
 function generateGUID() {
   var guid = "";
   for (var i = 0; i < 32; i++) {

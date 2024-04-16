@@ -1,30 +1,140 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-	margin: 0;
-	border: 0;
-	font-size: 100%;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
 }
-body, select, input, button {
+body,
+select,
+input,
+button {
   font-family: "Source Sans Pro", sans-serif;
 }
-table { border-collapse: collapse; border-spacing: 0; }
-img { border: 0; max-width: 100%; }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+img {
+  border: 0;
+  max-width: 100%;
+}
 
-a 
-{ text-decoration: none; }
-a:hover { text-decoration: underline; }
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section 
-{ display: block; }
-ol, ul { list-style: none; }
-blockquote, q { quotes: none; }
-blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
-strong { font-weight: bold; }
-body{
-  background: #F5F7FA;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+strong {
+  font-weight: bold;
+}
+body {
+  background: #f5f7fa;
 }
 html {
   overflow-y: scroll;
@@ -61,15 +171,17 @@ button {
   font-size: 16px;
   border: 1px solid #ddd;
   cursor: pointer;
-  background: #EDF1F2;
+  background: #edf1f2;
 }
-button, input, select {
+button,
+input,
+select {
   border-radius: 5px;
 }
 nav ul,
 nav ol {
   height: 250px;
-  padding:5px 5px 5px 20px;
+  padding: 5px 5px 5px 20px;
 }
 nav ul,
 nav ol {
@@ -77,12 +189,11 @@ nav ol {
   overflow-y: scroll;
 }
 .header {
-  background: #2E9F83;
+  background: #2e9f83;
   color: #ffffff;
   line-height: 60px;
 }
-.header-title
-{
+.header-title {
   text-align: left;
   font-size: 25px;
   margin-left: 60px;
@@ -98,7 +209,7 @@ nav ol {
 }
 .settings-container {
   margin: 5px;
-  margin-top:30px;
+  margin-top: 30px;
 }
 .settings-input {
   margin-left: 10px;
@@ -107,13 +218,11 @@ nav ol {
   margin-top: 5px;
   margin-left: 5px;
 }
-.products-list
-{
-  height:380px;
+.products-list {
+  height: 380px;
 }
-.cart-list
-{
-  height:300px;
+.cart-list {
+  height: 300px;
 }
 .check-connect-button {
   margin-top: 2px;
@@ -128,12 +237,12 @@ nav ol {
 .receipt-field {
   margin-top: 10px;
   margin-bottom: 10px;
-  padding:20px;
+  padding: 20px;
   border: 1px solid #ddd;
   overflow: hidden;
   overflow-y: scroll;
   height: 300px;
-  background: #EDF1F2;
+  background: #edf1f2;
 }
 .receipt-field {
   width: 350px;
@@ -168,7 +277,7 @@ nav ol {
   padding: 15px 20px;
   border: 1px solid #ddd;
   margin: 5px;
-  background: #F5F7FA;
+  background: #f5f7fa;
 }
 .products,
 .cart,
@@ -185,7 +294,7 @@ nav ol {
   width: 1304px;
 }
 .request-button {
-  background-color: #27C24C;
+  background-color: #27c24c;
   color: #f5f4f4;
   margin-bottom: 20px;
   margin-top: 5px;
@@ -195,8 +304,8 @@ nav ol {
 }
 
 .main-tab {
-  background-color: #F5F7FA;
-  width:1344px;
+  background-color: #f5f7fa;
+  width: 1344px;
 }
 
 .main-tab button {
@@ -208,7 +317,7 @@ nav ol {
   transition: 0.1s;
   border-radius: 0px;
   border: 1px solid #ddd;
-  color:#515253;
+  color: #515253;
   margin: 0px;
   height: 50px;
 }
@@ -219,7 +328,7 @@ nav ol {
 
 .main-tab button.active {
   background-color: #fdfdfd;
-  color:#000000;
+  color: #000000;
 }
 
 .main-tabcontent {
@@ -228,21 +337,17 @@ nav ol {
 }
 .clearfix:before,
 .clearfix:after {
-    content: " ";
-    display: table;
+  content: " ";
+  display: table;
 }
- 
+
 .clearfix:after {
-    clear: both;
-}
- 
-/* IE6/7 support */
-.clearfix {
-    *zoom: 1;
+  clear: both;
 }
 
 @media (max-width: 1355px) {
-  body, h2 {
+  body,
+  h2 {
     font-size: 2.5vh;
     text-align: center;
   }
@@ -250,11 +355,14 @@ nav ol {
     font-size: 2vh;
   }
   input,
-  select, 
+  select,
   button {
     height: 5vh;
-    width: 25vw;
     font-size: 2.5vh;
+  }
+  input,
+  select {
+    width: 50vw;
   }
   .row-container {
     display: flex;
@@ -266,9 +374,8 @@ nav ol {
     text-align: center;
     margin: 0px;
   }
-  .connect-status
-  {
-    height:5vh;
+  .connect-status {
+    height: 5vh;
   }
   .products,
   .cart,
@@ -289,19 +396,19 @@ nav ol {
     text-align: left;
   }
   .products {
-    height: 30vh;
+    height: 35vmax;
   }
   .single-field {
     height: 25vh;
   }
   .products-list {
-    height: 20vh;
+    height: 25vmax;
   }
   .cart {
-    height: 45vh;
+    height: 50vh;
   }
   .cart-list {
-    height: 20vh;
+    height: 25vh;
   }
   .others {
     height: 45vh;
@@ -309,7 +416,7 @@ nav ol {
   }
   .check-connect-button {
     margin-top: 20px;
-    width:auto;
+    width: auto;
   }
   .request-button {
     height: 6vh;
@@ -318,9 +425,14 @@ nav ol {
   }
   .main-tab {
     width: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
   }
   .main-tab button {
-    height:7.5vh;
-    width:auto;
+    height: 7.5vh;
+    width: auto;
   }
 }

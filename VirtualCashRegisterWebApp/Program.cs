@@ -73,14 +73,14 @@ app.Run(async (context) =>
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             message = e.Message;
         }
         await response.WriteAsJsonAsync(new { text = message });
 
     }
-    else if(request.Path == "/api/user/TerminalStatus")
+    else if (request.Path == "/api/user/TerminalStatus")
     {
         try
         {
@@ -98,7 +98,7 @@ app.Run(async (context) =>
         }
         await response.WriteAsJsonAsync(new { text = message });
     }
-    else if(request.Path == "/api/user/StatusList")
+    else if (request.Path == "/api/user/StatusList")
     {
         try
         {
