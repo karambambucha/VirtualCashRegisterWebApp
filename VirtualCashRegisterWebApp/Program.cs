@@ -3,6 +3,8 @@ using VirtualCashRegisterWebApp.Data;
 using Newtonsoft.Json;
 using System.Text;
 using static System.Net.WebRequestMethods;
+using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder();
 string connection = "Server=(localdb)\\mssqllocaldb;Database=Sales;Trusted_Connection=True;";
@@ -174,6 +176,17 @@ app.Run(async (context) =>
             message = e.Message;
         }
         await response.WriteAsJsonAsync(new { text = message });
+    }
+    else if (request.Path == "/api/Products")
+    {
+        var product = new Product();
+        product.Name = "Гавно";
+        product.Cost = 55.01;
+        var products = new List<Product>();
+        products.Add(product);
+        var jsonObject = JsonConvert.SerializeObject(products);
+
+        await response.WriteAsJsonAsync(new { text = jsonObject });
     }
     else
     {

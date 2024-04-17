@@ -7,16 +7,24 @@ fetch("products.json")
   .then((response) => response.json())
   .then((data) => {
     products = data;
-    renderProducts(products);
+      renderProducts(products);
   });
 function renderProducts(products) {
-  productsList.innerHTML = "";
-  products.forEach((product) => {
-    const li = document.createElement("li");
-    li.textContent = `${product.name} - ${product.price} руб.`;
-    li.onclick = () => addToCart(product);
-    productsList.appendChild(li);
-  });
+    productsList.innerHTML = "";
+    products.forEach((product) => {
+        const li = document.createElement("li");
+        li.textContent = `${product.name} - ${product.cost} руб.`;
+        li.onclick = () => addToCart(product);
+        productsList.appendChild(li);
+    });
+/*getProduct();
+async function getProduct()
+{
+    const response = await fetch("/api/Products");
+    const message = await response.json();
+    const userObject = JSON.parse(message.text);
+    console.log(userObject);
+}*/
 
   function generateGUID() {
     var guid = "";
@@ -27,7 +35,7 @@ function renderProducts(products) {
   }
   function addToCart(product) {
     const li = document.createElement("li");
-    li.textContent = `${product.name} - ${product.price} руб.`;
+    li.textContent = `${product.name} - ${product.cost} руб.`;
     li.onclick = () => removeFromCart(li);
     cartList.appendChild(li);
 
