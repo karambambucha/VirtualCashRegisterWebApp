@@ -1,10 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using VirtualCashRegisterWebApp.Data;
+using Newtonsoft.Json;
 using System.Text;
 using static System.Net.WebRequestMethods;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
+string connection = "Server=(localdb)\\mssqllocaldb;Database=Sales;Trusted_Connection=True;";
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
 var app = builder.Build();
 app.UseStaticFiles();
+
 app.Run(async (context) =>
 {
     var response = context.Response;
