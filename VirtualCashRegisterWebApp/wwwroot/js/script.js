@@ -17,14 +17,18 @@ function renderProducts(products) {
         li.onclick = () => addToCart(product);
         productsList.appendChild(li);
     });
-/*getProduct();
+getProduct();
 async function getProduct()
 {
-    const response = await fetch("/api/Products");
-    const message = await response.json();
-    const userObject = JSON.parse(message.text);
-    console.log(userObject);
-}*/
+    const response = await fetch("/api/Products", {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+    });
+    if (response.ok === true) {
+        const users = await response.json();
+        console.log(users);
+    }
+}
 
   function generateGUID() {
     var guid = "";
@@ -93,7 +97,7 @@ async function getProduct()
       };
       var requestBody = JSON.stringify(obj, null, 4);
       document.getElementById("sale-request").innerText = requestBody;
-      const response = await fetch("/api/user/Sale", {
+      const response = await fetch("/api/Sale", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -102,8 +106,8 @@ async function getProduct()
         body: requestBody,
       });
       const message = await response.json();
-      document.getElementById("sale-response").innerText = message.text;
-      const json = JSON.parse(message.text);
+      const json = JSON.parse(message);
+        document.getElementById("sale-response").innerText = JSON.stringify(json, null, 4);
       if (json.hasOwnProperty("Receipts")) {
         receipts = json.Receipts;
         if (receipts.hasOwnProperty("Customer"))
@@ -164,7 +168,7 @@ async function getProduct()
     };
     var requestBody = JSON.stringify(obj, null, 4);
     document.getElementById("settle-request").innerText = requestBody;
-    const response = await fetch("/api/user/Settle", {
+    const response = await fetch("/api/Settle", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -173,8 +177,8 @@ async function getProduct()
       body: requestBody,
     });
     const message = await response.json();
-    document.getElementById("settle-response").innerText = message.text;
-    const json = JSON.parse(message.text);
+    const json = JSON.parse(message);
+    document.getElementById("settle-response").innerText = JSON.stringify(json, null, 4);
     deserializeJsonSettleResponse(json);
   }
 
@@ -195,8 +199,7 @@ async function getProduct()
       receiptSettleSelect.options[receiptSettleSelect.selectedIndex].value ===
       "true"
     )
-      document.getElementById("settle-receipt").innerHTML =
-        settleDetails.Receipt;
+    document.getElementById("settle-receipt").innerHTML = settleDetails.Receipt;
     document.getElementById("settle-response-text").innerText = response;
   }
 
@@ -209,13 +212,12 @@ async function getProduct()
     var Tpn = document.getElementById("tpn-input").value;
     var Authkey = document.getElementById("auth-key-input").value;
     const response = await fetch(
-      `api/user/TerminalStatus?request.tpn=${Tpn}&request.authkey=${Authkey}`
+      `api/TerminalStatus/tpn=${Tpn}&authkey=${Authkey}`
     );
     const message = await response.json();
-    const json = JSON.parse(message.text);
-    if (json.TerminalStatus == "Online")
+    if (message.TerminalStatus == "Online")
       statusText.innerHTML = `Терминал ${Tpn} подключен!`;
-    else if (json.TerminalStatus == "Offline")
+    else if (message.TerminalStatus == "Offline")
       statusText.innerHTML = `Терминал  ${Tpn} не подключен`;
     else statusText.innerHTML = `Терминал  ${Tpn} не найден!`;
   }
@@ -235,7 +237,7 @@ async function getProduct()
     };
     var requestBody = JSON.stringify(obj, null, 4);
     document.getElementById("status-list-request").innerText = requestBody;
-    const response = await fetch("/api/user/StatusList", {
+    const response = await fetch("/api/StatusList", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -244,8 +246,8 @@ async function getProduct()
       body: requestBody,
     });
     const message = await response.json();
-    const json = JSON.parse(message.text);
-    document.getElementById("status-list-response").innerText = message.text;
+    const json = JSON.parse(message);
+      document.getElementById("status-list-response").innerText = JSON.stringify(json, null, 4);;
     deserializeJsonStatusListResponse(json);
   }
 
@@ -289,7 +291,7 @@ async function getProduct()
     };
     var requestBody = JSON.stringify(obj, null, 4);
     document.getElementById("status-request").innerText = requestBody;
-    const response = await fetch("/api/user/Status", {
+    const response = await fetch("/api/Status", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -298,8 +300,8 @@ async function getProduct()
       body: requestBody,
     });
     const message = await response.json();
-    const json = JSON.parse(message.text);
-    document.getElementById("status-response").innerText = message.text;
+    const json = JSON.parse(message);
+      document.getElementById("status-response").innerText = JSON.stringify(json, null, 4);;
     if (json.hasOwnProperty("Receipts")) {
       receipts = json.Receipts;
       if (receipts.hasOwnProperty("Customer"))
