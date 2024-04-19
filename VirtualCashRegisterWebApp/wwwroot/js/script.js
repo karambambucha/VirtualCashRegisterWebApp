@@ -3,21 +3,8 @@ const cartList = document.getElementById("cart-list");
 const totalPriceElement = document.getElementById("total-price");
 const clearCartButton = document.getElementById("clear-cart");
 
-fetch("products.json")
-  .then((response) => response.json())
-  .then((data) => {
-    products = data;
-      renderProducts(products);
-  });
-function renderProducts(products) {
-    productsList.innerHTML = "";
-    products.forEach((product) => {
-        const li = document.createElement("li");
-        li.textContent = `${product.name} - ${product.cost} руб.`;
-        li.onclick = () => addToCart(product);
-        productsList.appendChild(li);
-    });
 getProduct();
+
 async function getProduct()
 {
     const response = await fetch("/api/Products", {
@@ -25,11 +12,18 @@ async function getProduct()
         headers: { "Accept": "application/json" }
     });
     if (response.ok === true) {
-        const users = await response.json();
-        console.log(users);
+        const products = await response.json();
+        renderProducts(products);
     }
 }
-
+function renderProducts(products) {
+  productsList.innerHTML = "";
+  products.forEach((product) => {
+      const li = document.createElement("li");
+      li.textContent = `${product.name} - ${product.cost} руб.`;
+      li.onclick = () => addToCart(product);
+      productsList.appendChild(li);
+  });
   function generateGUID() {
     var guid = "";
     for (var i = 0; i < 32; i++) {

@@ -1,13 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VirtualCashRegisterWebApp.Data;
-using Newtonsoft.Json;
 using System.Text;
-using static System.Net.WebRequestMethods;
-using Newtonsoft.Json.Linq;
-using System.Text.Json;
-using static System.Formats.Asn1.AsnWriter;
-using Microsoft.Extensions.DependencyInjection;
-using NuGet.Protocol;
+using VirtualCashRegisterWebApp.Data;
 
 var builder = WebApplication.CreateBuilder();
 string connection = "Server=(localdb)\\mssqllocaldb;Database=Sales;Trusted_Connection=True;";
@@ -17,11 +10,13 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGet("/api/Products", async (ApplicationContext db) => {
-
-    var d = await db.Products.ToListAsync();
-    return d;
-});
+app.MapGet("/api/Products", async (ApplicationContext db) =>
+await db.Products.Select(product => new
+{
+    product.Id,
+    product.Name,
+    product.Cost
+}).ToListAsync());
 
 app.MapPost("/api/Sale", async (SaleRequest saleRequest) =>
 {
@@ -81,7 +76,7 @@ app.MapGet("/api/TerminalStatus/tpn={Tpn}&authkey={AuthKey}", async (string Tpn,
     }
 });
 
-app.MapPost("/api/StatusList", async(StatusListRequest statusListRequest) =>
+app.MapPost("/api/StatusList", async (StatusListRequest statusListRequest) =>
 {
     using (var httpClient = new HttpClient())
     {
@@ -167,9 +162,16 @@ public class StatusRequest()
     public string? PrintReceipt { get; set; }
     public string? GetReceipt { get; set; }
     public int MerchantNumber { get; set; }
-    public bool CaptureSignature{ get; set; }
+    public bool CaptureSignature { get; set; }
     public bool GetExtendedData { get; set; }
     public string? Tpn { get; set; }
     public string? AuthKey { get; set; }
     public int SPInProxyTimeout { get; set; }
 };
+
+public class ProductBase
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public double Cost { get; set; }
+}
