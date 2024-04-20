@@ -66,8 +66,8 @@ app.MapPost("/api/Sale", async (SaleRequest saleRequest, ApplicationContext db) 
                 Last4 = json["CardData"]["Last4"],
                 First4 = json["CardData"]["First4"],
                 BIN = json["CardData"]["BIN"],
-                CustomerReceipt = json["Receipts"]["CustomerReceipt"],
-                MerchantReceipt = json["Receipts"]["MerchantReceipt"],
+                CustomerReceipt = json["Receipts"]["Customer"],
+                MerchantReceipt = json["Receipts"]["Merchant"],
                 Products = products
             };
             db.SaleResponses.Add(saleResponse);
