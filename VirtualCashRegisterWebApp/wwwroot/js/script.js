@@ -21,6 +21,7 @@ function renderProducts(products) {
   products.forEach((product) => {
       const li = document.createElement("li");
       li.textContent = `${product.name} - ${product.cost} руб.`;
+      li.id = product.id;
       li.onclick = () => addToCart(product);
       productsList.appendChild(li);
   });
@@ -33,7 +34,10 @@ function renderProducts(products) {
   }
   function addToCart(product) {
     const li = document.createElement("li");
-    li.textContent = `${product.name} - ${product.cost} руб.`;
+      li.textContent = `${product.name} - ${product.cost} руб.`;
+      li.id = product.id;
+      li.name = product.name;
+      li.cost = product.cost;
     li.onclick = () => removeFromCart(li);
     cartList.appendChild(li);
 
@@ -63,31 +67,42 @@ function renderProducts(products) {
     cartList.innerHTML = "";
     updateTotalPrice();
   };
-  document
-    .getElementById("send-sale-request")
-    .addEventListener("click", sendSaleRequest);
-  async function sendSaleRequest() {
-    if (
-      document.getElementById("cart-list").getElementsByTagName("li").length > 0
-    ) {
+    document.getElementById("send-sale-request").addEventListener("click", sendSaleRequest);
+    function ReadCart(cart) {
+        var products = [];
+        for (let item of cart) {
+            console.log(item.id + item.name + item.cost);
+            products.push({
+                id: item.id,
+                name: item.name,
+                cost: item.cost
+            })
+        }
+        return products;
+    }
+    async function sendSaleRequest() {
+        var cart = document.getElementById("cart-list").getElementsByTagName("li");
+        var products = ReadCart(cart);
+    if (cart.length > 0) 
+    {
       document.getElementById("sale-response").innerText = "";
       document.getElementById("sale-response-text").innerText = "";
       document.getElementById("receipt-customer").innerText = "";
       document.getElementById("receipt-merchant").innerText = "";
       var receiptSelect = document.getElementById("receipt-recieve");
       var receiptPrintSelect = document.getElementById("receipt-print");
-      var paymentSelect = document.getElementById("payment-type");
+        var paymentSelect = document.getElementById("payment-type");
       var obj = {
         Amount: document.getElementById("total-price").innerHTML,
         TipAmount: document.getElementById("custom-tip").value,
         PaymentType: paymentSelect.options[paymentSelect.selectedIndex].value,
         ReferenceId: generateGUID(),
-        PrintReceipt:
-          receiptPrintSelect.options[receiptPrintSelect.selectedIndex].value,
+        PrintReceipt: receiptPrintSelect.options[receiptPrintSelect.selectedIndex].value,
         GetReceipt: receiptSelect.options[receiptSelect.selectedIndex].value,
         InvoiceNumber: "10",
         Tpn: document.getElementById("tpn-input").value,
         Authkey: document.getElementById("auth-key-input").value,
+        Products: products
       };
       var requestBody = JSON.stringify(obj, null, 4);
       document.getElementById("sale-request").innerText = requestBody;

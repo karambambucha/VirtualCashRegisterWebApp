@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text;
 using VirtualCashRegisterWebApp.Data;
 
@@ -18,7 +19,7 @@ await db.Products.Select(product => new
     product.Cost
 }).ToListAsync());
 
-app.MapPost("/api/Sale", async (SaleRequest saleRequest) =>
+app.MapPost("/api/Sale", async (SaleRequest saleRequest, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {
@@ -39,6 +40,39 @@ app.MapPost("/api/Sale", async (SaleRequest saleRequest) =>
         "application/json");
         using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
+        dynamic json = JsonConvert.DeserializeObject(jsonResponse);
+        if (json["GeneralResponse"]["Message"] == "Approved")
+        {
+            var cart = saleRequest.Products;
+            var products = new List<Product>();
+            foreach (ProductBase product in cart)
+            {
+                var prod = (from p in db.Products
+                            where p.Id == product.Id
+                            select p).ToList();
+                products.Add(prod[0]);
+            }
+            var saleResponse = new SaleResponse
+            {
+                ReferenceId = json["ReferenceId"],
+                TotalAmount = json["Amounts"]["TotalAmount"],
+                TipAmount = json["Amounts"]["TipAmount"],
+                FeeAmount = json["Amounts"]["FeeAmount"],
+                TaxAmount = json["Amounts"]["TaxAmount"],
+                PaymentType = json["PaymentType"],
+                AuthCode = json["AuthCode"],
+                CardType = json["CardData"]["CardType"],
+                EntryType = json["CardData"]["EntryType"],
+                Last4 = json["CardData"]["Last4"],
+                First4 = json["CardData"]["First4"],
+                BIN = json["CardData"]["BIN"],
+                CustomerReceipt = json["Receipts"]["CustomerReceipt"],
+                MerchantReceipt = json["Receipts"]["MerchantReceipt"],
+                Products = products
+            };
+            db.SaleResponses.Add(saleResponse);
+            db.SaveChanges();
+        }
         return Results.Json(jsonResponse);
     }
 });
@@ -136,6 +170,7 @@ public class SaleRequest()
     public string? InvoiceNumber { get; set; }
     public string? Tpn { get; set; }
     public string? AuthKey { get; set; }
+    public List<ProductBase>? Products { get; set; }
 };
 
 public class SettleRequest()
