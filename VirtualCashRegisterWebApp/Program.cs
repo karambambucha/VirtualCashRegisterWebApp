@@ -56,6 +56,7 @@ app.MapPost("/api/Sale", async (SaleRequest saleRequest, ApplicationContext db) 
             {
                 ReferenceId = json["ReferenceId"],
                 TotalAmount = json["Amounts"]["TotalAmount"],
+                Amount = json["Amounts"]["Amount"],
                 TipAmount = json["Amounts"]["TipAmount"],
                 FeeAmount = json["Amounts"]["FeeAmount"],
                 TaxAmount = json["Amounts"]["TaxAmount"],
@@ -66,6 +67,7 @@ app.MapPost("/api/Sale", async (SaleRequest saleRequest, ApplicationContext db) 
                 Last4 = json["CardData"]["Last4"],
                 First4 = json["CardData"]["First4"],
                 BIN = json["CardData"]["BIN"],
+                CardName = json["CardData"]["Name"],
                 CustomerReceipt = json["Receipts"]["Customer"],
                 MerchantReceipt = json["Receipts"]["Merchant"],
                 Products = products
@@ -131,29 +133,35 @@ app.MapPost("/api/StatusList", async (StatusListRequest statusListRequest) =>
     }
 });
 
-app.MapPost("/api/Status", async (StatusRequest statusRequest) =>
+app.MapGet("/api/Status/id={id}", async (int id, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {
-        using StringContent jsonContent = new(
-        System.Text.Json.JsonSerializer.Serialize(new
-        {
-            statusRequest.ReferenceId,
-            statusRequest.PaymentType,
-            statusRequest.PrintReceipt,
-            statusRequest.GetReceipt,
-            statusRequest.MerchantNumber,
-            statusRequest.CaptureSignature,
-            statusRequest.GetExtendedData,
-            statusRequest.Tpn,
-            statusRequest.AuthKey,
-            statusRequest.SPInProxyTimeout
-        }),
-        Encoding.UTF8,
-        "application/json");
-        using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Status", jsonContent);
-        var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        return Results.Json(jsonResponse);
+        var saleResponse = await db.SaleResponses
+            .Include(c => c.Products).Select(x => new
+            {
+                id = x.Id,
+                referenceId = x.ReferenceId,
+                amount = x.Amount,
+                authCode = x.AuthCode,
+                bin = x.BIN,
+                cardName = x.CardName,
+                cardType = x.CardType,
+                customerReceipt = x.CustomerReceipt,
+                entryType = x.EntryType,
+                feeAmount = x.FeeAmount,
+                first4 = x.First4,
+                last4 = x.Last4,
+                merchantReceipt = x.MerchantReceipt,
+                paymentType = x.PaymentType,
+                taxAmount = x.TaxAmount,
+                tipAmount = x.TipAmount,
+                totalAmount = x.TotalAmount,
+                products = x.Products.Select(k => new {k.Name, k.Cost}).ToList()
+            })
+            .FirstOrDefaultAsync(u => u.id == id);
+        if (saleResponse == null) return Results.NotFound(new { message = "Запись не найдена" });
+        return Results.Json(saleResponse);
     }
 });
 

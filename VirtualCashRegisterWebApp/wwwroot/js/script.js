@@ -71,7 +71,6 @@ function renderProducts(products) {
     function ReadCart(cart) {
         var products = [];
         for (let item of cart) {
-            console.log(item.id + item.name + item.cost);
             products.push({
                 id: item.id,
                 name: item.name,
@@ -256,7 +255,7 @@ function renderProducts(products) {
     });
     const message = await response.json();
     const json = JSON.parse(message);
-      document.getElementById("status-list-response").innerText = JSON.stringify(json, null, 4);;
+      document.getElementById("status-list-response").innerText = JSON.stringify(json, null, 4);
     deserializeJsonStatusListResponse(json);
   }
 
@@ -286,41 +285,36 @@ function renderProducts(products) {
     document.getElementById("status-response-text").innerText = "";
     document.getElementById("status-receipt-customer").innerText = "";
     document.getElementById("status-receipt-merchant").innerText = "";
-    var obj = {
-      PaymentType: "Credit",
-      MerchantNumber: 1,
-      PrintReceipt: "Both",
-      GetReceipt: "Both",
-      ReferenceId: document.getElementById("status-reference-id").value,
-      CaptureSignature: true,
-      GetExtendedData: true,
-      Tpn: document.getElementById("tpn-input").value,
-      AuthKey: document.getElementById("auth-key-input").value,
-      SPInProxyTimeout: document.getElementById("status-timeout").value,
-    };
-    var requestBody = JSON.stringify(obj, null, 4);
-    document.getElementById("status-request").innerText = requestBody;
-    const response = await fetch("/api/Status", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: requestBody,
-    });
-    const message = await response.json();
-    const json = JSON.parse(message);
-      document.getElementById("status-response").innerText = JSON.stringify(json, null, 4);;
-    if (json.hasOwnProperty("Receipts")) {
-      receipts = json.Receipts;
-      if (receipts.hasOwnProperty("Customer"))
-        document.getElementById("status-receipt-customer").innerHTML =
-          json.Receipts.Customer;
-      if (receipts.hasOwnProperty("Merchant"))
-        document.getElementById("status-receipt-merchant").innerHTML =
-          json.Receipts.Merchant;
-    }
-    document.getElementById("status-response-text").innerText =
-      deserializeJsonSaleResponse(json);
+      var id = document.getElementById("status-reference-id").value;
+      const jsonResponse = await fetch(
+          `api/Status/id=${id}`
+      );
+      const json = await jsonResponse.json();
+      if (json.message != "Запись не найдена") {
+          var response = `ТРАНЗАКЦИЯ ${json.id}\n\n`;
+          response += `Полная цена: ${json.totalAmount} руб., себестоимость: ${json.amount} руб., 
+        чаевые: ${json.tipAmount} руб., взнос: ${json.feeAmount} руб., налоги: ${json.taxAmount} руб.\n`;
+          response += `ID транзакции: ${json.referenceId}\n\n`;
+          response += `Вид оплаты: ${json.paymentType}\n`;
+          response += `Платежная система: ${json.cardType}\nСпособ оплаты: ${json.entryType}
+            Номер карты: ${json.first4} **** **** ${json.last4}\nБИН: ${json.bin}
+            Имя владельца: ${json.cardName}`;
+          console.log(json.products);
+          response += "\n\n====ПРОДУКТЫ====\n";
+          var productsText = "";
+          for (let item of json.products) {
+              productsText += `${item.name} - ${item.cost} руб.\n`;
+          }
+          response += productsText;
+          document.getElementById("status-response-text").innerText = response;
+          document.getElementById("status-receipt-customer").innerHTML = json.customerReceipt;
+          document.getElementById("status-receipt-merchant").innerHTML = json.merchantReceipt;
+      }
+      else
+      {
+          document.getElementById("status-response-text").innerText = `Запись с номером ${id} не найдена`;
+      }
+      document.getElementById("status-response").innerText = JSON.stringify(json, null, 4);
+      
   }
 }

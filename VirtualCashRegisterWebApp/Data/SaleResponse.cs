@@ -16,6 +16,7 @@
         public int Last4 { get; set; }
         public int First4 { get; set; }
         public int BIN { get; set; }
+        public string? CardName { get; set; }
         public string? CustomerReceipt { get; set; }
         public string? MerchantReceipt { get; set; }
         public List<Product>? Products { get; set; }
