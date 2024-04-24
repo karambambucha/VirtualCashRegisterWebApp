@@ -13,9 +13,9 @@
         public string? AuthCode { get; set; }
         public string? CardType { get; set; }
         public string? EntryType { get; set; }
-        public int Last4 { get; set; }
-        public int First4 { get; set; }
-        public int BIN { get; set; }
+        public string? Last4 { get; set; }
+        public string? First4 { get; set; }
+        public string? BIN { get; set; }
         public string? CardName { get; set; }
         public string? CustomerReceipt { get; set; }
         public string? MerchantReceipt { get; set; }

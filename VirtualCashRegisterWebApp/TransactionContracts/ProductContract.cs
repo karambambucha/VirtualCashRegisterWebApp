@@ -1,10 +1,9 @@
-﻿namespace VirtualCashRegisterWebApp.Data
+﻿namespace VirtualCashRegisterWebApp.TransactionContracts
 {
-    public class Product
+    public class ProductContract
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public double Cost { get; set; }
-        public ICollection<SaleResponse>? SaleResponses { get; set; }
     }
 }
