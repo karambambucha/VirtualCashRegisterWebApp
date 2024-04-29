@@ -1,4 +1,4 @@
-﻿namespace VirtualCashRegisterWebApp.Enums
+﻿namespace VirtualCashRegisterWebApp.TransactionContracts
 {
     public class CardDataContract
     {

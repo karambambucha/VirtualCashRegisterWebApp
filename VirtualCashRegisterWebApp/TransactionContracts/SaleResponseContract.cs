@@ -1,7 +1,4 @@
-﻿
-using VirtualCashRegisterWebApp.Enums;
-
-namespace VirtualCashRegisterWebApp.TransactionContracts
+﻿namespace VirtualCashRegisterWebApp.TransactionContracts
 {
     public class SaleResponseContract : BaseResponseContract
     {
@@ -13,7 +10,6 @@ namespace VirtualCashRegisterWebApp.TransactionContracts
         /// Amounts of money 
         /// </summary>
         public AmountsContract? Amounts { get; set; }
-        public EMVDataContract? EMVData { get; set; }
 
         public string? PaymentType { get; set; }
         public string? TransactionType { get; set; }

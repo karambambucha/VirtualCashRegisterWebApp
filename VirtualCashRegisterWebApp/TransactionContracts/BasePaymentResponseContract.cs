@@ -82,8 +82,6 @@ namespace VirtualCashRegisterWebApp.TransactionContracts
 
         public CardDataContract CardData { get; set; }
 
-        public EMVDataContract EMVData { get; set; }
-
         public ReceiptContract Receipts { get; set; }
     }
 }

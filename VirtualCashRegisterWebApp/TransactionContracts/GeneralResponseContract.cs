@@ -31,13 +31,5 @@ namespace VirtualCashRegisterWebApp.TransactionContracts
         /// Max delay before next request, if terminal is busy
         /// </summary>
         public double? DelayBeforeNextRequest { get; set; }
-
-        public bool IsOkResponse()
-        {
-            return (StatusCode == null || StatusCode == Enums.StatusCode.Approved)
-                && string.IsNullOrWhiteSpace(Message) || Message?.ToLower() == "ok" || Message?.ToLower() == "success";
-        }
-
-        public bool IsApiError() => ResultCode == Enums.ResultCode.ApiError;
     }
 }
