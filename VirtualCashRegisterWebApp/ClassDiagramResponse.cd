@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.AmountsContract">
+    <Position X="31.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAEAAAAAAQCAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>TransactionContracts\AmountsContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BasePaymentResponseContract">
+    <Position X="25.75" Y="5.5" Width="5" />
+    <TypeIdentifier>
+      <HashCode>JABAAAAAAAABAAABAgAQAAAAQAEEAAEIAQAAAAAhAAE=</HashCode>
+      <FileName>TransactionContracts\BasePaymentResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="GeneralResponse" />
+      <Property Name="Amounts" />
+      <Property Name="CardData" />
+      <Property Name="Receipts" />
+      <Property Name="PaymentType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BaseResponseContract">
+    <Position X="29" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\BaseResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="GeneralResponse" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.PaymentAmountsContract">
+    <Position X="23.25" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAEAAAAAAQCAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>TransactionContracts\PaymentAmountsContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.ReceiptContract">
+    <Position X="34.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\ReceiptContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SaleResponseContract">
+    <Position X="31.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAgAQAAAAAAAEAAEIAQAAAAAhAAA=</HashCode>
+      <FileName>TransactionContracts\SaleResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Receipts" />
+      <Property Name="Amounts" />
+      <Property Name="CardData" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SettleDetailsContract">
+    <Position X="30" Y="9.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQABAAAAAAAABAAAAAAAAAAAAAACAAAAAAAEA=</HashCode>
+      <FileName>TransactionContracts\SettleDetailsContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TransactionsReports" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SettleResponseContract">
+    <Position X="23" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\SettleResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SettleDetails" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SettleTransactionReportContract">
+    <Position X="26.5" Y="12.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\SettleResponseContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.StatusListResponseContract">
+    <Position X="34.25" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\StatusListResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Transactions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.TransactionSummaryReportContract">
+    <Position X="26.5" Y="10" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAQAABAAACAAAAIAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\TransactionSummaryReportContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.CardDataContract">
+    <Position X="33.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAQAAAgAIAAAAAAgAAAAACA=</HashCode>
+      <FileName>TransactionContracts\CardDataContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.GeneralResponseContract">
+    <Position X="22.5" Y="10" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAIAAgAEA=</HashCode>
+      <FileName>TransactionContracts\GeneralResponseContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ResultCode" />
+      <Property Name="StatusCode" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.GeneralPaymentResponseContract">
+    <Position X="22.5" Y="12.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>TransactionContracts\GeneralPaymentResponseContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.PaymentType">
+    <Position X="26.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAwAAAAAAIABAAAAAQAAEAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Enums\PaymentType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.ResultCode">
+    <Position X="23" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Enums\ResultCode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.StatusCode">
+    <Position X="20.25" Y="14" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>BgEAAHACAAAAAIIIgKRgIABHHJEFoEoAAAAAIAAEAAA=</HashCode>
+      <FileName>Enums\StatusCode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

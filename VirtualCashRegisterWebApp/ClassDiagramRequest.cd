@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BasePaymentRequestContract">
+    <Position X="36.5" Y="14.25" Width="2.25" />
+    <AssociationLine Name="CallbackInfo" Type="VirtualCashRegisterWebApp.TransactionContracts.CallbackInfoContract" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="36.5" Y="15.75" />
+        <Point X="36.125" Y="15.75" />
+        <Point X="36.125" Y="16.953" />
+        <Point X="35.25" Y="16.953" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="GetReceipt" Type="VirtualCashRegisterWebApp.Enums.ReceiptType" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="38.75" Y="15.995" />
+        <Point X="40.667" Y="15.995" Type="JumpStart" />
+        <Point X="40.833" Y="15.995" Type="JumpEnd" />
+        <Point X="43.312" Y="15.995" />
+        <Point X="43.312" Y="16.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAAAIBAAAEAAAAAAAgAQAIQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\BasePaymentRequestContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CallbackInfo" />
+      <Property Name="GetReceipt" />
+      <Property Name="PaymentType" />
+      <Property Name="PrintReceipt" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BaseRequestContract">
+    <Position X="34.5" Y="11.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAEAAAAAAABAAAAAAQAAAAAAAAAAQ=</HashCode>
+      <FileName>TransactionContracts\BaseRequestContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.CallbackInfoContract">
+    <Position X="33.5" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\CallbackInfoContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.ProductContract">
+    <Position X="36.75" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\ProductContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SaleRequestContract">
+    <Position X="36.5" Y="17" Width="2" />
+    <InheritanceLine Type="VirtualCashRegisterWebApp.TransactionContracts.BasePaymentRequestContract" FixedToPoint="true">
+      <Path>
+        <Point X="37.625" Y="16.252" />
+        <Point X="37.625" Y="17" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEBAAAAAACAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>TransactionContracts\SaleRequestContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Products" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.SettleRequestContract">
+    <Position X="30.25" Y="14.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAIAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\SettleRequestContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SettlementType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.StatusListRequestContract">
+    <Position X="39.5" Y="14.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\StatusListRequestContract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PaymentType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.TerminalStatusRequestContract">
+    <Position X="32.75" Y="14.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionContracts\TerminalStatusRequestContract.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.ReceiptType">
+    <Position X="42" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAgAAAAAAACAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\ReceiptType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.PaymentType">
+    <Position X="40" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAwAAAAAAIABAAAAAQAAEAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Enums\PaymentType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VirtualCashRegisterWebApp.Enums.SettlementType">
+    <Position X="30.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIAAA=</HashCode>
+      <FileName>Enums\SettlementType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

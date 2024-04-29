@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 using VirtualCashRegisterWebApp.Data;
+using VirtualCashRegisterWebApp.TransactionContracts;
+using VirtualCashRegisterWebApp.Enums;
 
 var builder = WebApplication.CreateBuilder();
-string connection = "Server=(localdb)\\mssqllocaldb;Database=Sales;Trusted_Connection=True;";
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+string testUrl = builder.Configuration.GetConnectionString("TestUrl");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
 
 var app = builder.Build();
 app.UseDefaultFiles();
@@ -19,83 +23,47 @@ await db.Products.Select(product => new
     product.Cost
 }).ToListAsync());
 
-app.MapPost("/api/Sale", async (SaleRequest saleRequest, ApplicationContext db) =>
+app.MapPost("/api/Sale", async (SaleRequestContract saleRequest, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {
-        using StringContent jsonContent = new(
-        System.Text.Json.JsonSerializer.Serialize(new
-        {
-            saleRequest.Amount,
-            saleRequest.TipAmount,
-            saleRequest.PaymentType,
-            saleRequest.ReferenceId,
-            saleRequest.PrintReceipt,
-            saleRequest.GetReceipt,
-            saleRequest.InvoiceNumber,
-            saleRequest.Tpn,
-            saleRequest.AuthKey,
-        }),
-        Encoding.UTF8,
-        "application/json");
-        using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Sale", jsonContent);
+        using StringContent jsonContent = new(JsonSerializer.Serialize(saleRequest), Encoding.UTF8, "application/json");
+        using HttpResponseMessage jsonMessage = await httpClient.PostAsync(testUrl + "Payment/Sale", jsonContent);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        dynamic json = JsonConvert.DeserializeObject(jsonResponse);
-        if (json["GeneralResponse"]["Message"] == "Approved")
+        var saleResponse = JsonSerializer.Deserialize<SaleResponseContract>(jsonResponse);
+        if (saleResponse.GeneralResponse.ResultCode == ResultCode.Ok)
         {
-            var cart = saleRequest.Products;
-            var products = new List<Product>();
-            foreach (ProductBase product in cart)
-            {
-                var prod = (from p in db.Products
-                            where p.Id == product.Id
-                            select p).ToList();
-                products.Add(prod[0]);
-            }
-            var saleResponse = new SaleResponse
-            {
-                ReferenceId = json["ReferenceId"],
-                TotalAmount = json["Amounts"]["TotalAmount"],
-                TipAmount = json["Amounts"]["TipAmount"],
-                FeeAmount = json["Amounts"]["FeeAmount"],
-                TaxAmount = json["Amounts"]["TaxAmount"],
-                PaymentType = json["PaymentType"],
-                AuthCode = json["AuthCode"],
-                CardType = json["CardData"]["CardType"],
-                EntryType = json["CardData"]["EntryType"],
-                Last4 = json["CardData"]["Last4"],
-                First4 = json["CardData"]["First4"],
-                BIN = json["CardData"]["BIN"],
-                CustomerReceipt = json["Receipts"]["Customer"],
-                MerchantReceipt = json["Receipts"]["Merchant"],
-                Products = products
-            };
-            db.SaleResponses.Add(saleResponse);
-            db.SaveChanges();
+            db.AddSaleResponse(saleResponse, saleRequest.Products);
         }
-        return Results.Json(jsonResponse);
+        return saleResponse;
     }
 });
 
-app.MapPost("/api/Settle", async (SettleRequest settleRequest) =>
+app.MapPost("/api/SaleSimple", async (SaleRequestContract saleRequest, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {
-        using StringContent jsonContent = new(
-        System.Text.Json.JsonSerializer.Serialize(new
-        {
-            settleRequest.ReferenceId,
-            settleRequest.GetReceipt,
-            settleRequest.SettlementType,
-            settleRequest.Tpn,
-            settleRequest.AuthKey,
-            settleRequest.SPInProxyTimeout
-        }),
-        Encoding.UTF8,
-        "application/json");
-        using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Settle", jsonContent);
+        using StringContent jsonContent = new(JsonSerializer.Serialize(saleRequest), Encoding.UTF8, "application/json");
+        using HttpResponseMessage jsonMessage = await httpClient.PostAsync(testUrl + "Payment/Sale", jsonContent);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        return Results.Json(jsonResponse);
+        var saleResponse = JsonSerializer.Deserialize<SaleResponseContract>(jsonResponse);
+        if(saleResponse.GeneralResponse.ResultCode == ResultCode.Ok)
+        {
+            db.AddSaleResponse(saleResponse);
+        }
+        return saleResponse;
+    }
+});
+
+app.MapPost("/api/Settle", async (SettleRequestContract settleRequest) =>
+{
+    using (var httpClient = new HttpClient())
+    {
+        using StringContent jsonContent = new(JsonSerializer.Serialize(settleRequest), Encoding.UTF8, "application/json");
+        using HttpResponseMessage jsonMessage = await httpClient.PostAsync(testUrl + "Payment/Settle", jsonContent);
+        var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
+        var settleResponse = JsonSerializer.Deserialize<SettleResponseContract>(jsonResponse);
+        return settleResponse;
     }
 });
 
@@ -103,110 +71,33 @@ app.MapGet("/api/TerminalStatus/tpn={Tpn}&authkey={AuthKey}", async (string Tpn,
 {
     using (var httpClient = new HttpClient())
     {
-        string url = "https://test.spinpos.net/spin/v2/Common/TerminalStatus?" + $"request.tpn={Tpn}&request.authkey={AuthKey}";
+        string url = testUrl + "/Common/TerminalStatus?" + $"request.tpn={Tpn}&request.authkey={AuthKey}";
         using HttpResponseMessage jsonMessage = await httpClient.GetAsync(url);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        return jsonResponse;
+        var terminalStatusResponse = JsonSerializer.Deserialize<TerminalStatusResponseContract>(jsonResponse);
+        return terminalStatusResponse;
     }
 });
 
-app.MapPost("/api/StatusList", async (StatusListRequest statusListRequest) =>
+app.MapPost("/api/StatusList", async (StatusListRequestContract statusListRequest) =>
 {
     using (var httpClient = new HttpClient())
     {
-        using StringContent jsonContent = new(
-        System.Text.Json.JsonSerializer.Serialize(new
-        {
-            statusListRequest.PaymentType,
-            statusListRequest.TransactionFromIndex,
-            statusListRequest.TransactionToIndex,
-            statusListRequest.Tpn,
-            statusListRequest.AuthKey
-        }),
-        Encoding.UTF8,
-        "application/json");
-        using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/StatusList", jsonContent);
+        using StringContent jsonContent = new(JsonSerializer.Serialize(statusListRequest), Encoding.UTF8, "application/json");
+        using HttpResponseMessage jsonMessage = await httpClient.PostAsync(testUrl + "/Payment/StatusList", jsonContent);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        return Results.Json(jsonResponse);
+        var statusListResponse = JsonSerializer.Deserialize<StatusListResponseContract>(jsonResponse);
+        return statusListResponse;
     }
 });
 
-app.MapPost("/api/Status", async (StatusRequest statusRequest) =>
+app.MapGet("/api/Status/id={id}", async (int id, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {
-        using StringContent jsonContent = new(
-        System.Text.Json.JsonSerializer.Serialize(new
-        {
-            statusRequest.ReferenceId,
-            statusRequest.PaymentType,
-            statusRequest.PrintReceipt,
-            statusRequest.GetReceipt,
-            statusRequest.MerchantNumber,
-            statusRequest.CaptureSignature,
-            statusRequest.GetExtendedData,
-            statusRequest.Tpn,
-            statusRequest.AuthKey,
-            statusRequest.SPInProxyTimeout
-        }),
-        Encoding.UTF8,
-        "application/json");
-        using HttpResponseMessage jsonMessage = await httpClient.PostAsync("https://test.spinpos.net/spin/v2/Payment/Status", jsonContent);
-        var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
-        return Results.Json(jsonResponse);
+        var saleResponse = await db.GetSaleResponse(id);
+        return saleResponse;
     }
 });
 
 app.Run();
-
-public class SaleRequest()
-{
-    public string? Amount { get; set; }
-    public string? TipAmount { get; set; }
-    public string? PaymentType { get; set; }
-    public string? ReferenceId { get; set; }
-    public string? PrintReceipt { get; set; }
-    public string? GetReceipt { get; set; }
-    public string? InvoiceNumber { get; set; }
-    public string? Tpn { get; set; }
-    public string? AuthKey { get; set; }
-    public List<ProductBase>? Products { get; set; }
-};
-
-public class SettleRequest()
-{
-    public string? ReferenceId { get; set; }
-    public bool GetReceipt { get; set; }
-    public string? SettlementType { get; set; }
-    public string? Tpn { get; set; }
-    public string? AuthKey { get; set; }
-    public int SPInProxyTimeout { get; set; }
-};
-public class StatusListRequest()
-{
-    public string? PaymentType { get; set; }
-    public string? TransactionFromIndex { get; set; }
-    public string? TransactionToIndex { get; set; }
-    public string? Tpn { get; set; }
-    public string? AuthKey { get; set; }
-};
-public class StatusRequest()
-{
-    public string? ReferenceId { get; set; }
-    public string? PaymentType { get; set; }
-    public string? PrintReceipt { get; set; }
-    public string? GetReceipt { get; set; }
-    public int MerchantNumber { get; set; }
-    public bool CaptureSignature { get; set; }
-    public bool GetExtendedData { get; set; }
-    public string? Tpn { get; set; }
-    public string? AuthKey { get; set; }
-    public int SPInProxyTimeout { get; set; }
-};
-
-public class ProductBase
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = "";
-    public double Cost { get; set; }
-}

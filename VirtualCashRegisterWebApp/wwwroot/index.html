@@ -47,19 +47,28 @@
     </div>
     <div class="container">
       <ul class="nav nav-tabs row">
+        <li>
+          <a data-toggle="tab" href="#sale"
+            >Проведение транзакции с продуктами</a
+          >
+        </li>
         <li class="active">
-          <a data-toggle="tab" href="#sale">Проведение транзакции</a>
+          <a data-toggle="tab" href="#sale-simple"
+            >Проведение обычной транзакции</a
+          >
         </li>
         <li>
-          <a data-toggle="tab" href="#status-list">Просмотр транзакций</a>
+          <a data-toggle="tab" href="#status-list"
+            >Просмотр транзакций на смене</a
+          >
         </li>
         <li>
-          <a data-toggle="tab" href="#status-tab">Просмотр одной транзакции</a>
+          <a data-toggle="tab" href="#status-tab">Просмотр транзакции из БД</a>
         </li>
         <li><a data-toggle="tab" href="#settle">Закрытие смены</a></li>
       </ul>
       <div class="tab-content">
-        <div id="sale" class="tab-pane fade in active">
+        <div id="sale" class="tab-pane fade in">
           <div class="row input-field">
             <div class="col-sm-4 input-inner-field">
               <label>Товары</label>
@@ -86,7 +95,14 @@
                   <label for="custom-tip">Чаевые (руб.):</label>
                 </div>
                 <div class="col-sm-7">
-                  <input class="form-select" type="number" id="custom-tip" min="0" step=".01" value="0.00"/>
+                  <input
+                    class="form-select"
+                    type="number"
+                    id="custom-tip"
+                    min="0"
+                    step=".01"
+                    value="0.00"
+                  />
                 </div>
               </div>
               <div class="form-group form-inline row">
@@ -94,7 +110,11 @@
                   <label for="payment-type">Вид оплаты:</label>
                 </div>
                 <div class="col-sm-7">
-                  <select class="form-select" name="payment-select" id="payment-type">
+                  <select
+                    class="form-select"
+                    name="payment-select"
+                    id="payment-type"
+                  >
                     <option value="Credit">Кредитная карта</option>
                     <option value="Debit">Дебетовая карта</option>
                     <option value="Cash">Наличные</option>
@@ -111,7 +131,11 @@
                   <label for="receipt-recieve">Отобразить чек для:</label>
                 </div>
                 <div class="col-sm-7">
-                  <select name="receipt-select" id="receipt-recieve" class="form-select">
+                  <select
+                    name="receipt-select"
+                    id="receipt-recieve"
+                    class="form-select"
+                  >
                     <option value="Both">Оба</option>
                     <option value="Customer">Покупатель</option>
                     <option value="Merchant">Продавец</option>
@@ -124,7 +148,11 @@
                   <label for="receipt-print">Напечатать чек для:</label>
                 </div>
                 <div class="col-sm-7">
-                  <select name="receipt-print-select" id="receipt-print" class="form-select">
+                  <select
+                    name="receipt-print-select"
+                    id="receipt-print"
+                    class="form-select"
+                  >
                     <option value="Both">Оба</option>
                     <option value="Customer">Покупатель</option>
                     <option value="Merchant">Продавец</option>
@@ -150,8 +178,7 @@
             </div>
             <div class="col-sm-4 info-col">
               <label class="info-title">Текстовый ответ:</label>
-              <div id="sale-response-text" class="info-field"
-              ></div>
+              <div id="sale-response-text" class="info-field"></div>
             </div>
             <div class="col-sm-4 info-col">
               <label class="info-title">Чек продавца:</label>
@@ -163,15 +190,158 @@
             </div>
           </div>
         </div>
+        <div id="sale-simple" class="tab-pane fade in active">
+          <div class="row input-field">
+            <div class="col-sm-5 input-inner-field">
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="cost-simple">Reference ID:</label>
+                </div>
+                <div class="col-sm-7">
+                  <input type="text" id="reference-id-simple" />
+                  <button id="generate-guid-simple">Создать GUID</button>
+                </div>
+              </div>
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="cost-simple">Стоимость (руб.):</label>
+                </div>
+                <div class="col-sm-7">
+                  <input
+                    class="form-select"
+                    type="number"
+                    id="cost-simple"
+                    min="0.01"
+                    step=".01"
+                    value="0.01"
+                  />
+                </div>
+              </div>
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="custom-tip-simple">Чаевые (руб.):</label>
+                </div>
+                <div class="col-sm-7">
+                  <input
+                    class="form-select"
+                    type="number"
+                    id="custom-tip-simple"
+                    min="0"
+                    step=".01"
+                    value="0.00"
+                  />
+                </div>
+              </div>
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="payment-type-simple">Вид оплаты:</label>
+                </div>
+                <div class="col-sm-7">
+                  <select
+                    class="form-select"
+                    name="payment-select-simple"
+                    id="payment-type-simple"
+                  >
+                    <option value="Credit">Кредитная карта</option>
+                    <option value="Debit">Дебетовая карта</option>
+                    <option value="Cash">Наличные</option>
+                    <option value="Check">Чек</option>
+                    <option value="Card">Card</option>
+                    <option value="Gift">Подарочная карта</option>
+                    <option value="EBT_Food">EBT Еда</option>
+                    <option value="EBT_Cash">EBT Наличные</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="receipt-recieve-simple"
+                    >Отобразить чек для:</label
+                  >
+                </div>
+                <div class="col-sm-7">
+                  <select
+                    name="receipt-select-simple"
+                    id="receipt-recieve-simple"
+                    class="form-select"
+                  >
+                    <option value="Both">Оба</option>
+                    <option value="Customer">Покупатель</option>
+                    <option value="Merchant">Продавец</option>
+                    <option value="No">Никто</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-inline row">
+                <div class="col-sm-5">
+                  <label for="receipt-print-simple">Напечатать чек для:</label>
+                </div>
+                <div class="col-sm-7">
+                  <select
+                    name="receipt-print-select-simple"
+                    id="receipt-print-simple"
+                    class="form-select"
+                  >
+                    <option value="Both">Оба</option>
+                    <option value="Customer">Покупатель</option>
+                    <option value="Merchant">Продавец</option>
+                    <option value="No">Никто</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <button
+              id="send-sale-request-simple"
+              class="btn btn-primary btn-block"
+            >
+              Отправить запрос
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 info-col">
+              <label class="info-title">Запрос:</label>
+              <div id="sale-request-simple" class="info-field"></div>
+            </div>
+            <div class="col-sm-6 info-col">
+              <label class="info-title">JSON ответ</label>
+              <div id="sale-response-simple" class="info-field"></div>
+            </div>
+            <div class="col-sm-4 info-col">
+              <label class="info-title">Текстовый ответ:</label>
+              <div id="sale-response-text-simple" class="info-field"></div>
+            </div>
+            <div class="col-sm-4 info-col">
+              <label class="info-title">Чек продавца:</label>
+              <div id="receipt-merchant-simple" class="info-field"></div>
+            </div>
+            <div class="col-sm-4 info-col">
+              <label class="info-title">Чек покупателя:</label>
+              <div id="receipt-customer-simple" class="info-field"></div>
+            </div>
+          </div>
+        </div>
         <div id="status-list" class="tab-pane fade in">
           <div class="row">
             <div class="col-sm-12 input-field input-inner-field">
               <div class="form-group form-inline row">
                 <div class="col-sm-3">
-                  <label for="status-list-from">Просмотреть транзакций от:</label>
+                  <label for="status-list-from"
+                    >Просмотреть транзакций от:</label
+                  >
                 </div>
                 <div class="col-sm-4">
-                  <input class="" type="number" id="status-list-from" min="1" max="5000" step="1"value="1" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                  <input
+                    class=""
+                    type="number"
+                    id="status-list-from"
+                    min="1"
+                    max="5000"
+                    step="1"
+                    value="1"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                  />
                 </div>
               </div>
               <div class="form-group form-inline row">
@@ -179,13 +349,25 @@
                   <label for="status-list-to">Просмотреть транзакций до:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input class="" type="number" id="status-list-to" min="1" max="5000" step="1"value="10" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                  <input
+                    class=""
+                    type="number"
+                    id="status-list-to"
+                    min="1"
+                    max="5000"
+                    step="1"
+                    value="10"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                  />
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <button id="send-status-list-request" class="btn btn-primary btn-block">
+            <button
+              id="send-status-list-request"
+              class="btn btn-primary btn-block"
+            >
               Отправить запрос
             </button>
           </div>
@@ -209,18 +391,10 @@
             <div class="col-sm-12 input-field input-inner-field">
               <div class="form-group form-inline row">
                 <div class="col-sm-3">
-                  <label for="status-list-from">ID транзакции:</label>
+                  <label for="status-list-from">Номер транзакции:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input class="" id="status-reference-id"/>
-                </div>
-              </div>
-              <div class="form-group form-inline row">
-                <div class="col-sm-3">
-                  <label for="status-list-to">Максимальное время ожидания (сек.):</label>
-                </div>
-                <div class="col-sm-4">
-                  <input class="" type="number" id="status-timeout" min="1" max="5000" step="1" value="10" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                  <input class="" id="status-reference-id" />
                 </div>
               </div>
             </div>
@@ -232,22 +406,18 @@
           </div>
           <div class="row">
             <div class="col-sm-6 info-col">
-              <label class="info-title">Запрос:</label>
-              <div id="status-request" class="info-field"></div>
-            </div>
-            <div class="col-sm-6 info-col">
               <label class="info-title">JSON ответ</label>
               <div id="status-response" class="info-field"></div>
             </div>
-            <div class="col-sm-4 info-col">
+            <div class="col-sm-6 info-col">
               <label class="info-title">Текстовый ответ:</label>
               <div id="status-response-text" class="info-field"></div>
             </div>
-            <div class="col-sm-4 info-col">
+            <div class="col-sm-6 info-col">
               <label class="info-title">Чек продавца:</label>
               <div id="status-receipt-merchant" class="info-field"></div>
             </div>
-            <div class="col-sm-4 info-col">
+            <div class="col-sm-6 info-col">
               <label class="info-title">Чек покупателя:</label>
               <div id="status-receipt-customer" class="info-field"></div>
             </div>
@@ -261,7 +431,11 @@
                   <label for="settle-is-receipt">Получение чека:</label>
                 </div>
                 <div class="col-sm-4">
-                  <select name="settle-receipt-select" id="settle-is-receipt" class="form-select">
+                  <select
+                    name="settle-receipt-select"
+                    id="settle-is-receipt"
+                    class="form-select"
+                  >
                     <option value="true">Да</option>
                     <option value="false">Нет</option>
                   </select>
@@ -269,10 +443,21 @@
               </div>
               <div class="form-group form-inline row">
                 <div class="col-sm-3">
-                  <label for="settle-timeout">Максимальное время ожидания (сек.):</label>
+                  <label for="settle-timeout"
+                    >Максимальное время ожидания (сек.):</label
+                  >
                 </div>
                 <div class="col-sm-4">
-                  <input class="" type="number" id="settle-timeout" min="1" max="5000" step="1"value="10" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"/>
+                  <input
+                    class=""
+                    type="number"
+                    id="settle-timeout"
+                    min="1"
+                    max="5000"
+                    step="1"
+                    value="10"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                  />
                 </div>
               </div>
             </div>
