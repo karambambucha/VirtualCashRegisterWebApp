@@ -9,20 +9,34 @@
   </Class>
   <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BasePaymentResponseContract">
     <Position X="25.75" Y="5.5" Width="5" />
+    <AssociationLine Name="Receipts" Type="VirtualCashRegisterWebApp.TransactionContracts.ReceiptContract" ManuallyRouted="true">
+      <Path>
+        <Point X="28.531" Y="5.5" />
+        <Point X="28.531" Y="5.272" />
+        <Point X="31.042" Y="5.272" Type="JumpStart" />
+        <Point X="31.208" Y="5.272" Type="JumpEnd" />
+        <Point X="32.979" Y="5.272" Type="JumpStart" />
+        <Point X="33.146" Y="5.272" Type="JumpEnd" />
+        <Point X="33.792" Y="5.272" Type="JumpStart" />
+        <Point X="33.958" Y="5.272" Type="JumpEnd" />
+        <Point X="35.812" Y="5.272" />
+        <Point X="35.812" Y="4.546" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>JABAAAAAAAABAAABAgAQAAAAQAEEAAEIAQAAAAAhAAE=</HashCode>
       <FileName>TransactionContracts\BasePaymentResponseContract.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="GeneralResponse" />
-      <Property Name="Amounts" />
+      <Property Name="PaymentType" />
       <Property Name="CardData" />
       <Property Name="Receipts" />
-      <Property Name="PaymentType" />
+      <Property Name="Amounts" />
     </ShowAsAssociation>
   </Class>
   <Class Name="VirtualCashRegisterWebApp.TransactionContracts.BaseResponseContract">
-    <Position X="29" Y="4" Width="1.75" />
+    <Position X="28.75" Y="4" Width="2" />
     <TypeIdentifier>
       <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>TransactionContracts\BaseResponseContract.cs</FileName>
@@ -30,13 +44,6 @@
     <ShowAsAssociation>
       <Property Name="GeneralResponse" />
     </ShowAsAssociation>
-  </Class>
-  <Class Name="VirtualCashRegisterWebApp.TransactionContracts.PaymentAmountsContract">
-    <Position X="23.25" Y="2.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAQAAEAAAAAAQCAAAAAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>TransactionContracts\PaymentAmountsContract.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Class Name="VirtualCashRegisterWebApp.TransactionContracts.ReceiptContract">
     <Position X="34.75" Y="3.25" Width="1.5" />

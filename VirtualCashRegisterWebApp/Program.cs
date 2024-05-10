@@ -2,8 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using VirtualCashRegisterWebApp.Data;
-using VirtualCashRegisterWebApp.TransactionContracts;
 using VirtualCashRegisterWebApp.Enums;
+using VirtualCashRegisterWebApp.TransactionContracts;
 
 var builder = WebApplication.CreateBuilder();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -47,7 +47,7 @@ app.MapPost("/api/SaleSimple", async (SaleRequestContract saleRequest, Applicati
         using HttpResponseMessage jsonMessage = await httpClient.PostAsync(testUrl + "Payment/Sale", jsonContent);
         var jsonResponse = await jsonMessage.Content.ReadAsStringAsync();
         var saleResponse = JsonSerializer.Deserialize<SaleResponseContract>(jsonResponse);
-        if(saleResponse.GeneralResponse.ResultCode == ResultCode.Ok)
+        if (saleResponse.GeneralResponse.ResultCode == ResultCode.Ok)
         {
             db.AddSaleResponse(saleResponse);
         }
@@ -91,7 +91,7 @@ app.MapPost("/api/StatusList", async (StatusListRequestContract statusListReques
     }
 });
 
-app.MapGet("/api/Status/id={id}", async (int id, ApplicationContext db) =>
+app.MapGet("/api/SaleResponse/id={id}", async (int id, ApplicationContext db) =>
 {
     using (var httpClient = new HttpClient())
     {

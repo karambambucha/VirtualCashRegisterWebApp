@@ -21,7 +21,7 @@ namespace VirtualCashRegisterWebApp.TransactionContracts
         /// </summary>
         public string TransactionType { get; set; }
 
-        public PaymentAmountsContract Amounts { get; set; }
+        public AmountsContract Amounts { get; set; }
 
         /// <summary>
         /// Authorization code provided by payment processor.

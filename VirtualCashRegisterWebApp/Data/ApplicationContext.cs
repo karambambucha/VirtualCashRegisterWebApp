@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using Nancy.Routing.Trie;
 using VirtualCashRegisterWebApp.TransactionContracts;
 namespace VirtualCashRegisterWebApp.Data
 {

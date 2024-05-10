@@ -12,6 +12,7 @@ async function getProduct() {
   });
   if (response.ok === true) {
     const products = await response.json();
+    products.sort((a, b) => a.name > b.name ? 1 : -1);
     renderProducts(products);
   }
 }
@@ -206,19 +207,22 @@ function deserializeJsonSettleResponse(json) {
   Ответ: ${json.generalResponse.message}
   Детальный ответ: ${json.generalResponse.detailedMessage}
   Код результата ${json.generalResponse.resultCode}, код статуса: ${json.generalResponse.statusCode}\n\n`;
-  settleDetails = json.settleDetails[0];
-  response += `Приложение: ${settleDetails.application}
-  Сообщение: ${settleDetails.detailedMessage}, статус хоста: ${settleDetails.hostStatus}\n`;
-  transactionsReports = settleDetails.transactionsReports;
-  response += `Всего транзакций в смене: ${transactionsReports.transactionsCount}
-  Продано на ${transactionsReports.saleAmount} руб., на возврат: ${transactionsReports.returnAmount} руб., отменено транзакции на ${transactionsReports.voidAmount} руб.
-  Всего: ${transactionsReports.totalAmount} руб.`;
-  var receiptSettleSelect = document.getElementById("settle-is-receipt");
-  if (
-    receiptSettleSelect.options[receiptSettleSelect.selectedIndex].value ===
-    "true"
-  )
-    document.getElementById("settle-receipt").innerHTML = settleDetails.receipt;
+  if(json.generalResponse.detailedMessage == "Ok")
+  {
+    settleDetails = json.settleDetails[0];
+    response += `Приложение: ${settleDetails.application}
+    Сообщение: ${settleDetails.detailedMessage}, статус хоста: ${settleDetails.hostStatus}\n`;
+    transactionsReports = settleDetails.transactionsReports;
+    response += `Всего транзакций в смене: ${transactionsReports.transactionsCount}
+    Продано на ${transactionsReports.saleAmount} руб., на возврат: ${transactionsReports.returnAmount} руб., отменено транзакции на ${transactionsReports.voidAmount} руб.
+    Всего: ${transactionsReports.totalAmount} руб.`;
+    var receiptSettleSelect = document.getElementById("settle-is-receipt");
+      if (
+          receiptSettleSelect.options[receiptSettleSelect.selectedIndex].value ===
+          "true"
+      )
+        document.getElementById("settle-receipt").innerHTML = settleDetails.receipt;
+  }
   document.getElementById("settle-response-text").innerText = response;
 }
 
@@ -304,7 +308,7 @@ async function sendStatusRequest() {
   document.getElementById("status-receipt-customer").innerText = "";
   document.getElementById("status-receipt-merchant").innerText = "";
   var id = document.getElementById("status-reference-id").value;
-  const jsonResponse = await fetch(`api/Status/id=${id}`);
+    const jsonResponse = await fetch(`api/SaleResponse/id=${id}`);
   const json = await jsonResponse.json();
   if (json != null) {
     var response = `ТРАНЗАКЦИЯ ${json.id}\n\n`;
@@ -380,22 +384,15 @@ async function sendSimpleSaleRequest() {
         }
       })
       .then((responseJson) => {
-        document.getElementById("sale-response-simple").innerText =
-          JSON.stringify(responseJson, null, 4);
-        document.getElementById("sale-response-text-simple").innerText =
-          deserializeJsonSaleResponse(responseJson);
-        if (responseJson.generalResponse.resultCode == "Ok") {
-          document.getElementById("receipt-customer-simple").innerHTML =
-            responseJson.receipts.customer;
-          document.getElementById("receipt-merchant-simple").innerHTML =
-            responseJson.receipts.merchant;
-        }
+        document.getElementById("sale-response-simple").innerText = JSON.stringify(responseJson, null, 4);
+        document.getElementById("sale-response-text-simple").innerText =deserializeJsonSaleResponse(responseJson);
+        document.getElementById("receipt-customer-simple").innerHTML = responseJson.receipts.customer;
+        document.getElementById("receipt-merchant-simple").innerHTML = responseJson.receipts.merchant;
       });
   } else {
     alert("Стоимость должна быть больше 0.01!");
   }
 }
-
 document
   .getElementById("generate-guid-simple")
   .addEventListener("click", generateGUIDSimple);
